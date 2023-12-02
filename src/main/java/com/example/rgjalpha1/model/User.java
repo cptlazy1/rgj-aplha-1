@@ -44,23 +44,13 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<GameSystem> gameSystems;
 
-//    @OneToOne(
-//            mappedBy = "user",
-//            cascade = CascadeType.ALL,
-//            fetch = FetchType.EAGER,
-//            orphanRemoval = true)
-//    @JoinColumn(name = "photo_id")
-//    @JsonIgnore
-//    private UserProfilePhoto userProfilePhoto;
-//
-//    @OneToOne(
-//            mappedBy = "user",
-//            cascade = CascadeType.ALL,
-//            fetch = FetchType.EAGER,
-//            orphanRemoval = true)
-//    @JoinColumn(name = "photo_id")
-//    @JsonIgnore
-//    private UserGameRoomPhoto userGameRoomPhoto;
+    private String profilePhotoFileName;
+    @Lob
+    private byte[] profilePhotoData;
+
+    private String gameRoomPhotoFileName;
+    @Lob
+    private byte[] gameRoomPhotoData;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

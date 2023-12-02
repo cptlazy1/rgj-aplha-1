@@ -23,7 +23,6 @@ public class UserService {
     private final GameSystemRepository gameSystemRepository;
     private final GameService gameService;
     private final GameSystemService gameSystemService;
-//    private final UserProfilePhotoRepository userProfilePhotoRepository;
 
     // Method to get all users
     public List<UserDto> getAllUsers() {
@@ -43,7 +42,7 @@ public class UserService {
 
     // Method to get user by username
     public UserDto getUserByUserName(String username) {
-        UserDto userDto = new UserDto();
+        UserDto userDto;
         Optional<User> userOptional = userRepository.findByUsername(username);
 
         if (userOptional.isPresent()) {
@@ -55,10 +54,6 @@ public class UserService {
         }
         return userDto;
     }
-
-    // Method to assign user profile photo to user
-
-
 
 
     // Method to convert User to UserDto with ModelMapper

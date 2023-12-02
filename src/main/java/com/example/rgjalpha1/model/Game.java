@@ -22,6 +22,10 @@ public class Game {
     private String gameReview;
     private String gameRating;
 
+    private String gamePhotoFileName;
+    @Lob
+    private byte[] gamePhotoData;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_name")
     private User user;

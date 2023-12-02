@@ -22,6 +22,10 @@ public class GameSystem {
     private String gameSystemReview;
     private String gameSystemRating;
 
+    private String gameSystemPhotoFileName;
+    @Lob
+    private byte[] gameSystemPhotoData;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_name")
