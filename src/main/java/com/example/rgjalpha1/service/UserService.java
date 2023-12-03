@@ -9,9 +9,13 @@ import com.example.rgjalpha1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -55,11 +59,27 @@ public class UserService {
         return userDto;
     }
 
-    // Method to add profile photo to user
+    // Method to upload a profile photo to a user
+    public User uploadProfilePhoto(MultipartFile file, String username) throws IOException {
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isEmpty()) {
+            throw new RecordNotFoundException("No user record exists for given username");
+        } else {
+            User user1 = user.get();
+            user1.setProfilePhotoFileName(fileName);
+            user1.setProfilePhotoData(file.getBytes());
+            userRepository.save(user1);
+            return user1;
+        }
+
+    }
 
 
 
-    // Method to convert User to UserDto with ModelMapper
+
+                                   // Method to convert User to UserDto with ModelMapper
     private UserDto convertToUserDto(User user) {
         ModelMapper modelMapper = new ModelMapper();
         UserDto userDto = modelMapper.map(user, UserDto.class);

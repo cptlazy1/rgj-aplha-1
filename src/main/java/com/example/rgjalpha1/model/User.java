@@ -45,6 +45,7 @@ public class User implements UserDetails {
     private List<GameSystem> gameSystems;
 
     private String profilePhotoFileName;
+
     @Lob
     private byte[] profilePhotoData;
 
