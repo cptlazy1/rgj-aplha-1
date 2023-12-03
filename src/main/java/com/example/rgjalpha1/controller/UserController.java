@@ -31,8 +31,4 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    // Todo: add method to assign user profile photo to user
-
-
-    // Todo: add method to assign user game room photo to user
 }

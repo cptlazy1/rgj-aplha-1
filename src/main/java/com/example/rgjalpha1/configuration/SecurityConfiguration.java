@@ -56,7 +56,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/users/**").hasAuthority("ADMIN") // Only admin can access this end-point
                                 .requestMatchers("/authentication/**").permitAll() // All users can access this end-point
 
-                                // ToDo: Add request matchers for all end-points
+                                // Todo: Add request matchers for all end-points
                                 .anyRequest().authenticated()
                 )
 

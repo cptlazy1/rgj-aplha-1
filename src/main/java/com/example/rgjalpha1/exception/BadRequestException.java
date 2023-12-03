@@ -1,6 +1,5 @@
 package com.example.rgjalpha1.exception;
 
-
 import java.io.Serial;
 
 public class BadRequestException extends RuntimeException{

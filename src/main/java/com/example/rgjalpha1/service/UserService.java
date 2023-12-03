@@ -24,7 +24,7 @@ public class UserService {
     private final GameService gameService;
     private final GameSystemService gameSystemService;
 
-    // Method to get all users
+    // Method to get all users - Admin only
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
 
@@ -40,7 +40,7 @@ public class UserService {
         }
     }
 
-    // Method to get user by username
+    // Method to get user by username -
     public UserDto getUserByUserName(String username) {
         UserDto userDto;
         Optional<User> userOptional = userRepository.findByUsername(username);
@@ -54,6 +54,9 @@ public class UserService {
         }
         return userDto;
     }
+
+    // Method to add profile photo to user
+
 
 
     // Method to convert User to UserDto with ModelMapper
