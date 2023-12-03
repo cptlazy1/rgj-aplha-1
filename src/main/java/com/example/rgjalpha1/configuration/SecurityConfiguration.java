@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         auth -> auth
+
                                 .requestMatchers("/users/**").hasAuthority("ADMIN") // Only admin can access this end-point
                                 .requestMatchers("/authentication/**").permitAll() // All users can access this end-point
 

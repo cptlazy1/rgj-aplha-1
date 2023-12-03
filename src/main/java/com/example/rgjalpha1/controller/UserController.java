@@ -3,6 +3,7 @@ package com.example.rgjalpha1.controller;
 import com.example.rgjalpha1.dto.PhotoUploadResponse;
 import com.example.rgjalpha1.dto.UserDto;
 import com.example.rgjalpha1.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class UserController {
 
     // PostMapping to upload a profile photo to a user
     @PostMapping("/users/{username}/upload-pp")
+
     public PhotoUploadResponse uploadProfilePhoto(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) throws IOException {
 
         String downloadUrl = ServletUriComponentsBuilder
@@ -49,6 +51,30 @@ public class UserController {
         String contentType = file.getContentType();
 
         userService.uploadProfilePhoto(file, username);
+
+        PhotoUploadResponse photoUploadResponse = new PhotoUploadResponse();
+        photoUploadResponse.setFileName(file.getOriginalFilename());
+        photoUploadResponse.setFileDownloadUrl(downloadUrl);
+        photoUploadResponse.setContentType(contentType);
+
+        return photoUploadResponse;
+    }
+
+    // PostMapping to upload a game room photo to a user
+    @PostMapping("/users/{username}/upload-grp")
+    public PhotoUploadResponse uploadGameRoomPhoto(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) throws IOException {
+
+        String downloadUrl = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/users/")
+                .path(username)
+                .path("/download-grp")
+                .path(Objects.requireNonNull(file.getOriginalFilename()))
+                .toUriString();
+
+        String contentType = file.getContentType();
+
+        userService.uploadGameRoomPhoto(file, username);
 
         PhotoUploadResponse photoUploadResponse = new PhotoUploadResponse();
         photoUploadResponse.setFileName(file.getOriginalFilename());
