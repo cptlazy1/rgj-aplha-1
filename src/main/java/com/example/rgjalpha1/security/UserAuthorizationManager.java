@@ -22,6 +22,7 @@ public class UserAuthorizationManager implements AuthorizationManager<RequestAut
         AntPathMatcher antPathMatcher = new AntPathMatcher();
         String urlUsername = antPathMatcher.extractUriTemplateVariables("/users/{username}/**", path).get("username");
 
+        // This code prevents NullPointerException when authenticationSupplier.get() returns null
         UserDetails userDetails = (UserDetails) (authenticationSupplier.get() != null ? authenticationSupplier.get().getPrincipal() : null);
         String authenticatedUsername = userDetails != null ? userDetails.getUsername() : null;
 
