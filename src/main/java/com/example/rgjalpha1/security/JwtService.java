@@ -1,4 +1,4 @@
-package com.example.rgjalpha1.service;
+package com.example.rgjalpha1.security;
 
 
 import io.jsonwebtoken.Claims;

@@ -1,4 +1,4 @@
-package com.example.rgjalpha1.service;
+package com.example.rgjalpha1.security;
 
 import com.example.rgjalpha1.dto.AuthenticationRequest;
 import com.example.rgjalpha1.dto.AuthenticationResponse;
@@ -6,6 +6,7 @@ import com.example.rgjalpha1.dto.RegisterRequest;
 import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.UserRepository;
 import com.example.rgjalpha1.role.Role;
+import com.example.rgjalpha1.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

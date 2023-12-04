@@ -1,6 +1,5 @@
 package com.example.rgjalpha1.security;
 
-import com.example.rgjalpha1.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
