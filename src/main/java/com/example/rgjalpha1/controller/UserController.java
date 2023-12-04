@@ -22,7 +22,13 @@ public class UserController {
     private final UserService userService;
 
     // GetMapping to get all users
-    @GetMapping("/users")
+//    @GetMapping("/users")
+//    public ResponseEntity<List<UserDto>> getAllUsers() {
+//        List<UserDto> userDtos = userService.getAllUsers();
+//        return ResponseEntity.ok(userDtos);
+//    }
+
+    @GetMapping("/admin")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> userDtos = userService.getAllUsers();
         return ResponseEntity.ok(userDtos);
