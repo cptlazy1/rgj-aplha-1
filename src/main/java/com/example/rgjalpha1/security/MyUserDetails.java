@@ -13,10 +13,10 @@ public class MyUserDetails implements UserDetails {
 
     private final User user;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> authorities = List.of(() -> user.getRole().name());
+        return authorities;
     }
 
     @Override

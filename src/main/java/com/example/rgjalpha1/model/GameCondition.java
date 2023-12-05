@@ -22,7 +22,6 @@ public class GameCondition {
     private Boolean hasManual;
     private Boolean hasCase;
 
-
     @OneToOne(mappedBy = "gameCondition")
     private Game game;
 }

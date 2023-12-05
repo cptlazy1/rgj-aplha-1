@@ -26,7 +26,6 @@ public class GameSystem {
     @Lob
     private byte[] gameSystemPhotoData;
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_name")
     private User user;

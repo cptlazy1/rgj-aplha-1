@@ -2,20 +2,23 @@ package com.example.rgjalpha1.controller;
 
 
 import com.example.rgjalpha1.dto.GameDto;
+import com.example.rgjalpha1.dto.PhotoUploadResponse;
 import com.example.rgjalpha1.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
 public class GameController {
 
     private final GameService gameService;
-
 
     // PostMapping to add game
     @PostMapping("/games")
@@ -31,13 +34,42 @@ public class GameController {
         return ResponseEntity.created(uri).body(gameDto);
     }
 
+    // PostMapping to upload a game photo to a game
+    @PostMapping("/users/{username}/games/{gameID}/upload-game-photo")
+    public PhotoUploadResponse uploadGamePhoto(
+            @PathVariable("username") String username,
+            @PathVariable("gameID") Long gameID,
+            @RequestParam("file") MultipartFile file) throws IOException {
 
+            String downloadUrl = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("users/{username}/games/")
+                    .path(gameID.toString())
+                    .path("/download-game-photo")
+                    .path(Objects.requireNonNull(file.getOriginalFilename()))
+                    .toUriString();
+
+            String contentType = file.getContentType();
+
+            gameService.uploadGamePhoto(file, gameID, username);
+
+            PhotoUploadResponse photoUploadResponse = new PhotoUploadResponse();
+            photoUploadResponse.setFileName(file.getOriginalFilename());
+            photoUploadResponse.setFileDownloadUrl(downloadUrl);
+            photoUploadResponse.setContentType(contentType);
+
+            return photoUploadResponse;
+    }
+
+
+    // PutMapping to update game by gameID
     @PutMapping("/games/{id}")
     public ResponseEntity<GameDto> updateGame(@PathVariable("id") Long gameID, @RequestBody GameDto dto)  {
         GameDto gameDto = gameService.updateGame(gameID, dto);
         return ResponseEntity.ok().body(gameDto);
     }
 
+    // DeleteMapping to delete game by gameID
     @DeleteMapping("/games/{id}")
     public ResponseEntity<Void> deleteGame(@PathVariable("id") Long gameID) {
         gameService.deleteGame(gameID);

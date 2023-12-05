@@ -5,12 +5,18 @@ import com.example.rgjalpha1.exception.BadRequestException;
 import com.example.rgjalpha1.exception.RecordNotFoundException;
 import com.example.rgjalpha1.model.GameSystem;
 import com.example.rgjalpha1.model.GameSystemCondition;
+import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.GameSystemConditionRepository;
 import com.example.rgjalpha1.repository.GameSystemRepository;
+import com.example.rgjalpha1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -20,6 +26,8 @@ public class GameSystemService {
     private final GameSystemRepository gameSystemRepository;
 
     private final GameSystemConditionRepository gameSystemConditionRepository;
+
+    private final UserRepository userRepository;
 
     // Method to add game system with null check for the game system name
     public GameSystemDto addGameSystem(GameSystemDto gameSystemDto) throws BadRequestException {
@@ -87,6 +95,29 @@ public class GameSystemService {
     }
 
 
+    // Method to upload game system photo
+    public void uploadGameSystemPhoto(MultipartFile file, Long gameSystemID, String username) throws IOException {
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        Optional<GameSystem> gameSystem=  gameSystemRepository.findById(gameSystemID);
+        Optional<User> user = userRepository.findByUsername(username);
+
+        try {
+            if (gameSystem.isEmpty()) {
+                throw new RecordNotFoundException("No game system record exists for given gameSystemID");
+            } else if (user.isEmpty()) {
+                throw new RecordNotFoundException("No user record exists for given username");
+            } else {
+                GameSystem gameSystem1 = gameSystem.get();
+                gameSystem1.setGameSystemPhotoFileName(fileName);
+                gameSystem1.setGameSystemPhotoData(file.getBytes());
+                gameSystemRepository.save(gameSystem1);
+            }
+        }
+        catch (IOException e) {
+            throw new IOException("Issue in uploading the file: " + fileName, e);
+        }
+
+    }
 
     // Method to convert GameSystemDto to GameSystem with ModelMapper
     public GameSystem convertToGameSystem(GameSystemDto gameSystemDto) {

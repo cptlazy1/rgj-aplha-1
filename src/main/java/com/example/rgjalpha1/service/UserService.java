@@ -2,6 +2,8 @@ package com.example.rgjalpha1.service;
 
 import com.example.rgjalpha1.dto.UserDto;
 import com.example.rgjalpha1.exception.RecordNotFoundException;
+import com.example.rgjalpha1.exception.UsernameNotFoundException;
+import com.example.rgjalpha1.model.Game;
 import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.GameRepository;
 import com.example.rgjalpha1.repository.GameSystemRepository;
@@ -57,26 +59,24 @@ public class UserService {
             userDto = convertToUserDto(user);
 
         } else {
-            throw new RecordNotFoundException("No user record exists for given username");
+            throw new UsernameNotFoundException("No user record exists for given username");
         }
         return userDto;
     }
 
     // Method to upload a profile photo to a user
-    @Transactional
-    public User uploadProfilePhoto(MultipartFile file, String username) throws IOException {
+    public void uploadProfilePhoto(MultipartFile file, String username) throws IOException {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         Optional<User> user = userRepository.findByUsername(username);
 
         try {
             if (user.isEmpty()) {
-                throw new RecordNotFoundException("No user record exists for given username");
+                throw new UsernameNotFoundException("No user record exists for given username");
             } else {
                 User user1 = user.get();
                 user1.setProfilePhotoFileName(fileName);
                 user1.setProfilePhotoData(file.getBytes());
                 userRepository.save(user1);
-                return user1;
             }
         } catch (IOException e) {
             throw new IOException("Issue in uploading the file", e);
@@ -86,20 +86,19 @@ public class UserService {
 
 
     // Method to upload a game room photo to a user
-    public User uploadGameRoomPhoto(MultipartFile file, String username) throws IOException {
+    public void uploadGameRoomPhoto(MultipartFile file, String username) throws IOException {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         Optional<User> user = userRepository.findByUsername(username);
 
         try {
             if (user.isEmpty()) {
-                throw new RecordNotFoundException("No user record exists for given username");
+                throw new UsernameNotFoundException("No user record exists for given username");
             } else {
 
                 User user1 = user.get();
                 user1.setGameRoomPhotoFileName(fileName);
                 user1.setGameRoomPhotoData(file.getBytes());
                 userRepository.save(user1);
-                return user1;
             }
         } catch (IOException e) {
             throw new IOException("Issue in uploading the file", e);
@@ -109,17 +108,49 @@ public class UserService {
 
 
     // Method to delete user profile photo
-    public User deleteProfilePhoto(String username) {
+    public void deleteProfilePhoto(String username) {
         Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isEmpty()) {
-            throw new RecordNotFoundException("No user record exists for given username");
+            throw new UsernameNotFoundException("No user record exists for given username");
         } else {
             User user1 = user.get();
             user1.setProfilePhotoFileName(null);
             user1.setProfilePhotoData(null);
             userRepository.save(user1);
-            return user1;
+
+        }
+    }
+
+    // Method to delete user game room photo
+    public void deleteGameRoomPhoto(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("No user record exists for given username");
+        } else {
+            User user1 = user.get();
+            user1.setGameRoomPhotoFileName(null);
+            user1.setGameRoomPhotoData(null);
+            userRepository.save(user1);
+
+        }
+    }
+
+    // Method to assign game to user
+    public void assignGameToUser(String username, Long gameID) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        Optional<Game> gameOptional = gameRepository.findById(gameID);
+
+        if (userOptional.isPresent() && gameOptional.isPresent()) {
+            User user = userOptional.get();
+            Game game = gameOptional.get();
+
+            user.getGames().add(game);
+            game.setUser(user);
+            userRepository.save(user);
+        } else {
+            throw new RecordNotFoundException("No user or game record exists for given username or gameID");
         }
     }
 

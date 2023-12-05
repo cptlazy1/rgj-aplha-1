@@ -3,7 +3,6 @@ package com.example.rgjalpha1.controller;
 import com.example.rgjalpha1.dto.PhotoUploadResponse;
 import com.example.rgjalpha1.dto.UserDto;
 import com.example.rgjalpha1.service.UserService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,13 +20,6 @@ public class UserController {
 
 
     private final UserService userService;
-
-    // GetMapping to get all users
-//    @GetMapping("/users")
-//    public ResponseEntity<List<UserDto>> getAllUsers() {
-//        List<UserDto> userDtos = userService.getAllUsers();
-//        return ResponseEntity.ok(userDtos);
-//    }
 
     @GetMapping("/admin")
     public ResponseEntity<List<UserDto>> getAllUsers() {
@@ -41,10 +34,9 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    // PostMapping to upload a profile photo to a user
-    @PostMapping("/users/{username}/upload-pp")
 
-    public PhotoUploadResponse uploadProfilePhoto(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) throws IOException {
+    @PostMapping("/users/{username}/upload-pp")
+    public ResponseEntity<PhotoUploadResponse> uploadProfilePhoto(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) throws IOException {
 
         String downloadUrl = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
@@ -63,12 +55,13 @@ public class UserController {
         photoUploadResponse.setFileDownloadUrl(downloadUrl);
         photoUploadResponse.setContentType(contentType);
 
-        return photoUploadResponse;
+        return ResponseEntity.ok(photoUploadResponse);
     }
+
 
     // PostMapping to upload a game room photo to a user
     @PostMapping("/users/{username}/upload-grp")
-    public PhotoUploadResponse uploadGameRoomPhoto(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<PhotoUploadResponse> uploadGameRoomPhoto(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) throws IOException {
 
         String downloadUrl = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
@@ -87,8 +80,42 @@ public class UserController {
         photoUploadResponse.setFileDownloadUrl(downloadUrl);
         photoUploadResponse.setContentType(contentType);
 
-        return photoUploadResponse;
+        return ResponseEntity.ok(photoUploadResponse);
     }
 
+    // DeleteMapping to delete user profile photo by username
+    @DeleteMapping("/users/{username}/delete-pp")
+    public ResponseEntity<String> deleteProfilePhoto(@PathVariable("username") String username) {
+        userService.deleteProfilePhoto(username);
+        return ResponseEntity.ok(username + "'s profile photo has been deleted ");
+    }
+
+    // DeleteMapping to delete user game room photo by username
+    @DeleteMapping("/users/{username}/delete-grp")
+    public ResponseEntity<String> deleteGameRoomPhoto(@PathVariable("username") String username) {
+        userService.deleteGameRoomPhoto(username);
+        return ResponseEntity.ok(username + "'s game room photo has been deleted ");
+    }
+
+    // PutMapping to assign game to user
+    @PutMapping("/users/{username}/games/{gameID}")
+    public ResponseEntity<Object> assignGameToUser(@PathVariable("username") String username, @PathVariable("gameID") Long gameID) {
+        userService.assignGameToUser(username, gameID);
+
+        URI uri = URI.create(ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/users/{userID}/games/{gameID}")
+                .buildAndExpand(username, gameID)
+                .toUriString());
+
+        return ResponseEntity.noContent().location(uri).build();
+    }
+
+    // PutMapping to assign game system to user
+
+    // GetMapping to download a game room photo from a user (is it necessary?)
+
+
+    // GetMapping to download a profile photo from a user (is it necessary?)
 
 }

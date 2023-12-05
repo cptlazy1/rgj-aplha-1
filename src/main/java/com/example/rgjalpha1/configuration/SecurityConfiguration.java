@@ -33,7 +33,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/authentication/**").permitAll() // All users can access this end-point
                                 .requestMatchers("/admin/**").hasAuthority("ADMIN") // Only admin can access this end-point
                                 .requestMatchers("/users/{username}/**").access(new UserAuthorizationManager()) // Only the user with the same username can access this end-point
-
+                                .requestMatchers("/users/{username}/games/{gameID}/upload-game-photo").access(new UserAuthorizationManager()) // Only the user with the same username can access this end-point
 
                                 // Todo: Add request matchers for all end-points
                                 .anyRequest().authenticated()

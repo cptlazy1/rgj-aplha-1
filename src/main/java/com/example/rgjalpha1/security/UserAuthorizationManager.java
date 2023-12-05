@@ -5,6 +5,7 @@ import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.util.AntPathMatcher;
 
@@ -12,6 +13,8 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 public class UserAuthorizationManager implements AuthorizationManager<RequestAuthorizationContext> {
+
+
 
     @Override
     public AuthorizationDecision check(Supplier<Authentication> authenticationSupplier, RequestAuthorizationContext context) {

@@ -84,6 +84,5 @@ public class GameSystemConditionService {
         return modelMapper.map(gameSystemCondition, GameSystemConditionDto.class);
     }
 
-
 }
 

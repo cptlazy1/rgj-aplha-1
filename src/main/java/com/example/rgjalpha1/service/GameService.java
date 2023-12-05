@@ -6,12 +6,19 @@ import com.example.rgjalpha1.exception.BadRequestException;
 import com.example.rgjalpha1.exception.RecordNotFoundException;
 import com.example.rgjalpha1.model.Game;
 import com.example.rgjalpha1.model.GameCondition;
+import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.GameConditionRepository;
 import com.example.rgjalpha1.repository.GameRepository;
+import com.example.rgjalpha1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -20,6 +27,7 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final GameConditionRepository gameConditionRepository;
+    private final UserRepository userRepository;
 
 
     // Method to add game with null check for the game name
@@ -33,7 +41,6 @@ public class GameService {
         }
 
     }
-
 
 
     // Method to update game by gameID
@@ -90,6 +97,31 @@ public class GameService {
         } else {
             throw new RecordNotFoundException("No game record exists for given gameID");
         }
+    }
+
+
+    // Method to upload a game photo to a game
+    public void uploadGamePhoto(MultipartFile file, Long gameID, String username) throws IOException {
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        Optional<Game> game = gameRepository.findById(gameID);
+        Optional<User> user = userRepository.findByUsername(username);
+
+        try {
+            if (game.isEmpty()) {
+                throw new RecordNotFoundException("No game record exists for given gameID");
+            } else if (user.isEmpty()) {
+                throw new UsernameNotFoundException("No user record exists for given username");
+            } else {
+                Game game1 = game.get();
+                game1.setGamePhotoFileName(fileName);
+                game1.setGamePhotoData(file.getBytes());
+                gameRepository.save(game1);
+
+            }
+        } catch (IOException e) {
+            throw new IOException("Issue in uploading the file: " + fileName, e);
+        }
+
     }
 
 
