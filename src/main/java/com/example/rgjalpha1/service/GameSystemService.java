@@ -16,6 +16,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -39,6 +41,29 @@ public class GameSystemService {
             return convertToGameSystemDto(savedGameSystem);
         }
 
+    }
+
+    // Method to get all game systems
+    public List<GameSystemDto> getAllGameSystems() {
+        List<GameSystem> gameSystems = gameSystemRepository.findAll();
+        List<GameSystemDto> gameSystemDtos = new ArrayList<>();
+        for (GameSystem gameSystem : gameSystems) {
+            GameSystemDto gameSystemDto = convertToGameSystemDto(gameSystem);
+            gameSystemDtos.add(gameSystemDto);
+        }
+        return gameSystemDtos;
+    }
+
+    // Method to get all game systems of a user
+    public List<GameSystemDto> getAllGameSystemsOfUser(String username) {
+        List<GameSystem> gameSystems = gameSystemRepository.findAllByUserUsername(username);
+        List<GameSystemDto> gameSystemDtos = new ArrayList<>();
+        for (GameSystem gameSystem : gameSystems) {
+            GameSystemDto gameSystemDto = convertToGameSystemDto(gameSystem);
+            gameSystemDtos.add(gameSystemDto);
+
+        }
+        return gameSystemDtos;
     }
 
     // Method to update game system by gameSystemID

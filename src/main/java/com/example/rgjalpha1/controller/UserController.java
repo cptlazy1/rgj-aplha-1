@@ -114,6 +114,7 @@ public class UserController {
 
     // PutMapping to assign game system to user
 
+
     // GetMapping to download a game room photo from a user (is it necessary?)
 
 

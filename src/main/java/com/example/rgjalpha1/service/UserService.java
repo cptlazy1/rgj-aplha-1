@@ -4,6 +4,7 @@ import com.example.rgjalpha1.dto.UserDto;
 import com.example.rgjalpha1.exception.RecordNotFoundException;
 import com.example.rgjalpha1.exception.UsernameNotFoundException;
 import com.example.rgjalpha1.model.Game;
+import com.example.rgjalpha1.model.GameSystem;
 import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.GameRepository;
 import com.example.rgjalpha1.repository.GameSystemRepository;
@@ -154,6 +155,23 @@ public class UserService {
         }
     }
 
+    // Method to assign game system to user
+    public void assignGameSystemToUser(String username, Long gameSystemID) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        Optional<GameSystem> gameSystemOptional = gameSystemRepository.findById(gameSystemID);
+
+        if (userOptional.isPresent() && gameSystemOptional.isPresent()) {
+            User user = userOptional.get();
+            GameSystem gameSystem = gameSystemOptional.get();
+
+            user.getGameSystems().add(gameSystem);
+            gameSystem.setUser(user);
+            userRepository.save(user);
+        } else {
+            throw new RecordNotFoundException("No user or game record exists for given username or game system ID");
+        }
+    }
+
     // Method to convert User to UserDto with ModelMapper
     private UserDto convertToUserDto(User user) {
         ModelMapper modelMapper = new ModelMapper();
@@ -167,5 +185,7 @@ public class UserService {
         User user = modelMapper.map(userDto, User.class);
         return user;
     }
+
+
 
 }

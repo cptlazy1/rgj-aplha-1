@@ -37,9 +37,18 @@ public class GameController {
 //        return ResponseEntity.created(uri).body(gameDto);
 //    }
 
+    // GetMapping to get all games
+    @GetMapping("/admin/games")
+    public ResponseEntity<List<GameDto>> getAllGames() {
+        List<GameDto> gameDtos = gameService.getAllGames();
+        return ResponseEntity.ok().body(gameDtos);
+    }
+
     // PostMapping to add a game AND assign it to a user
     @PostMapping("/users/{username}/games")
-    public ResponseEntity<GameDto> addGame(@PathVariable("username") String username, @RequestBody GameDto dto) {
+    public ResponseEntity<GameDto> addGame(
+            @PathVariable("username") String username,
+            @RequestBody GameDto dto) {
         GameDto gameDto = gameService.addGame(dto);
 
         URI uri = URI.create(ServletUriComponentsBuilder
@@ -80,19 +89,15 @@ public class GameController {
             return photoUploadResponse;
     }
 
-    // GetMapping to get all games
-    @GetMapping("/admin/games")
-    public ResponseEntity<List<GameDto>> getAllGames() {
-        List<GameDto> gameDtos = gameService.getAllGames();
-        return ResponseEntity.ok().body(gameDtos);
-    }
 
     // GetMapping to get all of a users games
     @GetMapping("/users/{username}/games")
-    public ResponseEntity<List<GameDto>> getAllUsersGames(@PathVariable("username") String username) {
+    public ResponseEntity<List<GameDto>> getAllUsersGames(
+            @PathVariable("username") String username) {
         List<GameDto> gameDtos = gameService.getAllGamesOfUser(username);
         return ResponseEntity.ok().body(gameDtos);
     }
+
 
     // PutMapping to update game by gameID
     @PutMapping("/games/{id}")
