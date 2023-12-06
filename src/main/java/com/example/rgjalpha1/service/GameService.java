@@ -31,6 +31,7 @@ public class GameService {
     private final GameConditionRepository gameConditionRepository;
     private final UserRepository userRepository;
 
+    // Todo: add validation to every method
 
     // Method to add game with null check for the game name
     public GameDto addGame(GameDto gameDto) throws BadRequestException {

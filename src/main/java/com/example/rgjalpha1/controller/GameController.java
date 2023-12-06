@@ -4,6 +4,7 @@ package com.example.rgjalpha1.controller;
 import com.example.rgjalpha1.dto.GameDto;
 import com.example.rgjalpha1.dto.PhotoUploadResponse;
 import com.example.rgjalpha1.service.GameService;
+import com.example.rgjalpha1.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,17 +21,34 @@ import java.util.Objects;
 public class GameController {
 
     private final GameService gameService;
+    private final UserService userService;
 
     // PostMapping to add game
-    @PostMapping("/games")
-    public ResponseEntity<GameDto> addGame(@RequestBody GameDto dto) {
+//    @PostMapping("/users/{username}/games")
+//    public ResponseEntity<GameDto> addGame(@RequestBody GameDto dto) {
+//        GameDto gameDto = gameService.addGame(dto);
+//
+//        URI uri = URI.create(ServletUriComponentsBuilder
+//                .fromCurrentContextPath()
+//                .path("/games/{id}")
+//                .buildAndExpand(gameDto.getGameID())
+//                .toUriString());
+//
+//        return ResponseEntity.created(uri).body(gameDto);
+//    }
+
+    // PostMapping to add a game AND assign it to a user
+    @PostMapping("/users/{username}/games")
+    public ResponseEntity<GameDto> addGame(@PathVariable("username") String username, @RequestBody GameDto dto) {
         GameDto gameDto = gameService.addGame(dto);
 
         URI uri = URI.create(ServletUriComponentsBuilder
                 .fromCurrentContextPath()
-                .path("/games/{id}")
-                .buildAndExpand(gameDto.getGameID())
+                .path("/users/{username}/games/{id}")
+                .buildAndExpand(username, gameDto.getGameID())
                 .toUriString());
+
+        userService.assignGameToUser(username, gameDto.getGameID());
 
         return ResponseEntity.created(uri).body(gameDto);
     }
