@@ -56,6 +56,19 @@ public class GameService {
         return gameDtos;
     }
 
+    // Method to get all games of a user
+    public List<GameDto> getAllGamesOfUser(String username) {
+        List<Game> games = gameRepository.findAllByUserUsername(username);
+        List<GameDto> gameDtos = new ArrayList<>();
+        for (Game game : games) {
+            GameDto gameDto = convertToGameDto(game);
+            gameDtos.add(gameDto);
+        }
+        return gameDtos;
+    }
+
+
+
     // Method to update game by gameID
     public GameDto updateGame(Long gameID, GameDto gameDto) {
 
