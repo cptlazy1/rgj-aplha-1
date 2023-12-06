@@ -52,4 +52,7 @@ public class GameSystemConditionController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    // PutMapping to assign game system condition to game system
+
 }

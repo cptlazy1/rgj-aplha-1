@@ -18,9 +18,13 @@ public class GameCondition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "game_condition_id")
     private Long gameConditionID;
-    private Boolean isCompleteInBox;
+
     private Boolean hasManual;
     private Boolean hasCase;
+
+    private Boolean hasScratches;
+    private Boolean hasStickers;
+    private Boolean hasWriting;
 
     @OneToOne(mappedBy = "gameCondition")
     private Game game;

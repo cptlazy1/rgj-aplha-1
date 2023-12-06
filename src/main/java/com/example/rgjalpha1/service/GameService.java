@@ -1,6 +1,5 @@
 package com.example.rgjalpha1.service;
 
-
 import com.example.rgjalpha1.dto.GameDto;
 import com.example.rgjalpha1.exception.BadRequestException;
 import com.example.rgjalpha1.exception.RecordNotFoundException;
@@ -77,15 +76,9 @@ public class GameService {
         if (gameOptional.isPresent()) {
             Game game = gameOptional.get();
 
-            // Manual null check for each field
+            // Todo: Manual null check for each field
             if (gameDto.getGameName() != null) {
                 game.setGameName(gameDto.getGameName());
-            }
-            if (gameDto.getGameReview() != null) {
-                game.setGameReview(gameDto.getGameReview());
-            }
-            if (gameDto.getGameRating() != null) {
-                game.setGameRating(gameDto.getGameRating());
             }
 
             Game updatedGame = gameRepository.save(game);

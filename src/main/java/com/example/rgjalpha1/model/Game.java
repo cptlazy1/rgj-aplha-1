@@ -19,12 +19,14 @@ public class Game {
     @Column(name = "game_id")
     private Long gameID;
     private String gameName;
-    private String gameReview;
-    private String gameRating;
+    private int gameYearOfRelease;
+    private String gamePublisher;
+    private Boolean gameIsOriginal;
 
-    private String gamePhotoFileName;
+
     @Lob
     private byte[] gamePhotoData;
+    private String gamePhotoFileName;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_name")

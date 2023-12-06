@@ -26,9 +26,7 @@ import java.util.Optional;
 public class GameSystemService {
 
     private final GameSystemRepository gameSystemRepository;
-
     private final GameSystemConditionRepository gameSystemConditionRepository;
-
     private final UserRepository userRepository;
 
     // Method to add game system with null check for the game system name
@@ -74,15 +72,9 @@ public class GameSystemService {
         if (gameSystemOptional.isPresent()) {
             GameSystem gameSystem = gameSystemOptional.get();
 
-            // Manual null check for each field
+            // ToDo: Manual null check for each field
             if (gameSystemDto.getGameSystemName() != null) {
                 gameSystem.setGameSystemName(gameSystemDto.getGameSystemName());
-            }
-            if (gameSystemDto.getGameSystemReview() != null) {
-                gameSystem.setGameSystemReview(gameSystemDto.getGameSystemReview());
-            }
-            if (gameSystemDto.getGameSystemRating() != null) {
-                gameSystem.setGameSystemRating(gameSystemDto.getGameSystemRating());
             }
 
             GameSystem updatedGameSystem = gameSystemRepository.save(gameSystem);

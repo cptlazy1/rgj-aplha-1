@@ -28,7 +28,6 @@ public class User implements UserDetails {
 
     private String password;
     private String email;
-    private Boolean profileIsPrivate;
     private Boolean isEnabled;
 
     @Enumerated(value = EnumType.STRING)

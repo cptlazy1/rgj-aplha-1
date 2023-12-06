@@ -17,15 +17,11 @@ import java.util.Optional;
 public class GameConditionService {
 
     private final GameConditionRepository gameConditionRepository;
-
     private final GameRepository gameRepository;
 
-
-    // Method to null check for the game condition fields
+    // Todo: Method to null check for the game condition fields
     public Boolean nullCheck(GameConditionDto gameConditionDto) throws BadRequestException {
-        if (gameConditionDto.getIsCompleteInBox() == null) {
-            throw new BadRequestException("Game condition CIB cannot be null");
-        } else if (gameConditionDto.getHasManual() == null) {
+         if (gameConditionDto.getHasManual() == null) {
             throw new BadRequestException("Game condition Has Manual cannot be null");
         } else if (gameConditionDto.getHasCase() == null) {
             throw new BadRequestException("Game condition Has Case cannot be null");
@@ -57,7 +53,6 @@ public class GameConditionService {
             if (existingGameCondition.isPresent()) {
 
                 GameCondition gameCondition = existingGameCondition.get();
-                gameCondition.setIsCompleteInBox(gameConditionDto.getIsCompleteInBox());
                 gameCondition.setHasManual(gameConditionDto.getHasManual());
                 gameCondition.setHasCase(gameConditionDto.getHasCase());
 
@@ -71,17 +66,43 @@ public class GameConditionService {
         }
     }
 
+    // From AI: It seems like the issue might be related to the GameCondition object being assigned to multiple Game
+    // objects. In a typical relational database, if a GameCondition is assigned to a Game, it cannot be assigned to
+    // another Game unless the relationship is defined as a many-to-many relationship.  If you want to assign the same
+    // GameCondition to multiple Game objects, you need to define a many-to-many relationship between Game and
+    // GameCondition. This can be done by adding a Set<Game> field in the GameCondition class and a Set<GameCondition>
+    // field in the Game class.
+
+    // There are 8 different game conditions, so I think it would be better to have a one-to-many relationship between
+    // Game and GameCondition.  This means that a Game can only have one GameCondition, but a GameCondition can be
+    // assigned to multiple Game objects. Find out which relationship is more appropriate for your use case and
+    // implement it.
+
     // Method to assign game condition to game
     public void assignGameCondition(Long gameID, Long gameConditionID) {
-        Optional<GameCondition> gameConditionOptional = gameConditionRepository.findById(gameConditionID);
-        Optional<Game> gameOptional = gameRepository.findById(gameID);
-        if (gameConditionOptional.isPresent() && gameOptional.isPresent()) {
-            GameCondition gameCondition = gameConditionOptional.get();
-            Game game = gameOptional.get();
-            gameCondition.setGame(game);
-            gameConditionRepository.save(gameCondition);
-        } else {
-            throw new BadRequestException("Game condition or game with the given ID does not exist");
+        try {
+            Optional<GameCondition> gameConditionOptional = gameConditionRepository.findById(gameConditionID);
+            Optional<Game> gameOptional = gameRepository.findById(gameID);
+            if (gameConditionOptional.isPresent() && gameOptional.isPresent()) {
+                Game game = gameOptional.get();
+                GameCondition gameCondition = gameConditionOptional.get();
+
+                // Check if the game already has a condition assigned to it
+                if (game.getGameCondition() != null) {
+                    throw new BadRequestException("The game already has a condition assigned to it");
+                }
+
+                // If not, assign the new condition to the game
+                game.setGameCondition(gameCondition);
+
+                gameConditionRepository.save(gameCondition);
+            } else {
+                throw new BadRequestException("Game condition or game with the given ID does not exist");
+            }
+        } catch (BadRequestException e) {
+            // Log the exception and rethrow it
+            System.err.println(e.getMessage());
+            throw e;
         }
     }
 

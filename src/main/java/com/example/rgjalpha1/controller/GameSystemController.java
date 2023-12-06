@@ -23,19 +23,6 @@ public class GameSystemController {
     private final GameSystemService gameSystemService;
     private final UserService userService;
 
-    // PostMapping to add game system
-//    @PostMapping("/game-systems")
-//    public ResponseEntity<GameSystemDto> addGameSystem(@Valid @RequestBody GameSystemDto dto) {
-//        GameSystemDto gameSystemDto = gameSystemService.addGameSystem(dto);
-//
-//        URI uri = URI.create(ServletUriComponentsBuilder
-//                .fromCurrentContextPath()
-//                .path("/game-systems/{id}")
-//                .buildAndExpand(gameSystemDto.getGameSystemID())
-//                .toUriString());
-//
-//        return ResponseEntity.created(uri).body(gameSystemDto);
-//    }
 
     // GetMapping to get all game systems
     @GetMapping("/admin/game-systems")

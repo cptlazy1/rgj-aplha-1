@@ -11,8 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GameConditionDto {
 
+    // TODO: Add validation for the game condition fields
     public Long gameConditionID;
-    public Boolean isCompleteInBox;
     public Boolean hasManual;
     public Boolean hasCase;
+    public Boolean hasScratches;
+    public Boolean hasStickers;
+    public Boolean hasWriting;
 }

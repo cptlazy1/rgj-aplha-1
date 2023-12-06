@@ -11,9 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GameSystemDto {
 
+    // Todo: add validation for each field
     public Long gameSystemID;
     public String gameSystemName;
-    public String gameSystemReview;
-    public String gameSystemRating;
+    public String gameSystemBrand;
+    public int gameSystemYearOfRelease;
+    public Boolean isReadyToPlay;
+
 
 }

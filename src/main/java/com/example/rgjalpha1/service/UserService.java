@@ -10,7 +10,6 @@ import com.example.rgjalpha1.repository.GameRepository;
 import com.example.rgjalpha1.repository.GameSystemRepository;
 import com.example.rgjalpha1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -29,9 +28,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
     private final GameSystemRepository gameSystemRepository;
-    private final GameService gameService;
-    private final GameSystemService gameSystemService;
-
 
 
     // Method to get all users - Admin only
