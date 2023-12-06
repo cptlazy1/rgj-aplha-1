@@ -18,6 +18,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -42,6 +44,16 @@ public class GameService {
 
     }
 
+    // Method to get all games
+    public List<GameDto> getAllGames() {
+        List<Game> games = gameRepository.findAll();
+        List<GameDto> gameDtos = new ArrayList<>();
+        for (Game game : games) {
+            GameDto gameDto = convertToGameDto(game);
+            gameDtos.add(gameDto);
+        }
+        return gameDtos;
+    }
 
     // Method to update game by gameID
     public GameDto updateGame(Long gameID, GameDto gameDto) {

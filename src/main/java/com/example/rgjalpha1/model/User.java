@@ -29,6 +29,7 @@ public class User implements UserDetails {
     private String password;
     private String email;
     private Boolean profileIsPrivate;
+    private Boolean isEnabled;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
@@ -45,17 +46,15 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<GameSystem> gameSystems;
 
+    @Basic(fetch = FetchType.EAGER)
+    @Lob
+    private byte[] profilePhotoData;
     private String profilePhotoFileName;
 
     @Basic(fetch = FetchType.EAGER)
     @Lob
-    private byte[] profilePhotoData;
-
-    private String gameRoomPhotoFileName;
-
-    @Basic(fetch = FetchType.EAGER)
-    @Lob
     private byte[] gameRoomPhotoData;
+    private String gameRoomPhotoFileName;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -12,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -59,6 +60,13 @@ public class GameController {
             photoUploadResponse.setContentType(contentType);
 
             return photoUploadResponse;
+    }
+
+    // GetMapping to get all games
+    @GetMapping("/admin/games")
+    public ResponseEntity<List<GameDto>> getAllGames() {
+        List<GameDto> gameDtos = gameService.getAllGames();
+        return ResponseEntity.ok().body(gameDtos);
     }
 
 
