@@ -116,8 +116,8 @@ public class GameController {
 
 
     // DeleteMapping to delete game by gameID
-    @DeleteMapping("/games/{id}")
-    public ResponseEntity<Void> deleteGame(@PathVariable("id") Long gameID) {
+    @DeleteMapping("users/{username}/games/{id}")
+    public ResponseEntity<Void> deleteGame(@PathVariable("username") String username,  @PathVariable("id") Long gameID) {
         gameService.deleteGame(gameID);
         return ResponseEntity.noContent().build();
     }

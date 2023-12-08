@@ -1,12 +1,12 @@
 -- Users
-INSERT INTO users (is_enabled, email, password, role, username)
-VALUES (true, 'lazy@strong.com', '$2a$12$IzA1Ja1LH4PSMoro9PeITO1etDlknPjSX1nLusgt1vi9c1uaEXdEK', 'USER', 'cptlazy');
+INSERT INTO users (is_enabled, profile_is_private, email, password, role, username)
+VALUES (true, true, 'lazy@strong.com', '$2a$12$IzA1Ja1LH4PSMoro9PeITO1etDlknPjSX1nLusgt1vi9c1uaEXdEK', 'USER', 'cptlazy');
 
-INSERT INTO users (is_enabled, email, password, role, username)
-VALUES (true, 'pok@bess.com', '$2a$12$IzA1Ja1LH4PSMoro9PeITO1etDlknPjSX1nLusgt1vi9c1uaEXdEK', 'USER', 'porgy');
+INSERT INTO users (is_enabled, profile_is_private, email, password, role, username)
+VALUES (true, true, 'pok@bess.com', '$2a$12$IzA1Ja1LH4PSMoro9PeITO1etDlknPjSX1nLusgt1vi9c1uaEXdEK', 'USER', 'porgy');
 
-INSERT INTO users (is_enabled, email, password, role, username)
-VALUES (true, 'tik@groot.com', '$2a$12$IzA1Ja1LH4PSMoro9PeITO1etDlknPjSX1nLusgt1vi9c1uaEXdEK', 'ADMIN', 'tokkkie');
+INSERT INTO users (is_enabled, profile_is_private, email, password, role, username)
+VALUES (true, true, 'tik@groot.com', '$2a$12$IzA1Ja1LH4PSMoro9PeITO1etDlknPjSX1nLusgt1vi9c1uaEXdEK', 'ADMIN', 'tokkkie');
 
 -- Games
 INSERT INTO games (game_name, game_year_of_release, game_publisher, game_is_original)

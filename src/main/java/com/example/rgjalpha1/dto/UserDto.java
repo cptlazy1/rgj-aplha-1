@@ -14,5 +14,6 @@ public class UserDto {
     public String username;
     public String email;
     public Boolean profileIsPrivate;
+    public Boolean isEnabled;
 
 }

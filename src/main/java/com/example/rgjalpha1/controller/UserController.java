@@ -98,21 +98,21 @@ public class UserController {
         return ResponseEntity.ok(username + "'s game room photo has been deleted ");
     }
 
-    // PutMapping to assign game to user
-    @PutMapping("/users/{username}/games/{gameID}")
-    public ResponseEntity<Object> assignGameToUser(@PathVariable("username") String username, @PathVariable("gameID") Long gameID) {
-        userService.assignGameToUser(username, gameID);
+    // PutMapping to assign game to user (is it necessary?)
+//    @PutMapping("/users/{username}/games/{gameID}")
+//    public ResponseEntity<Object> assignGameToUser(@PathVariable("username") String username, @PathVariable("gameID") Long gameID) {
+//        userService.assignGameToUser(username, gameID);
+//
+//        URI uri = URI.create(ServletUriComponentsBuilder
+//                .fromCurrentContextPath()
+//                .path("/users/{userID}/games/{gameID}")
+//                .buildAndExpand(username, gameID)
+//                .toUriString());
+//
+//        return ResponseEntity.noContent().location(uri).build();
+//    }
 
-        URI uri = URI.create(ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/users/{userID}/games/{gameID}")
-                .buildAndExpand(username, gameID)
-                .toUriString());
-
-        return ResponseEntity.noContent().location(uri).build();
-    }
-
-    // PutMapping to assign game system to user
+    // PutMapping to assign game system to user (is it necessary?)
 
 
     // GetMapping to download a game room photo from a user (is it necessary?)
