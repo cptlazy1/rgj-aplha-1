@@ -1,8 +1,11 @@
 package com.example.rgjalpha1.controller;
 
 
+import com.example.rgjalpha1.dto.GameAndConditionDto;
+import com.example.rgjalpha1.dto.GameConditionDto;
 import com.example.rgjalpha1.dto.GameDto;
 import com.example.rgjalpha1.dto.PhotoUploadResponse;
+import com.example.rgjalpha1.service.GameConditionService;
 import com.example.rgjalpha1.service.GameService;
 import com.example.rgjalpha1.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,20 +25,8 @@ public class GameController {
 
     private final GameService gameService;
     private final UserService userService;
+    private final GameConditionService gameConditionService;
 
-    // PostMapping to add game
-//    @PostMapping("/users/{username}/games")
-//    public ResponseEntity<GameDto> addGame(@RequestBody GameDto dto) {
-//        GameDto gameDto = gameService.addGame(dto);
-//
-//        URI uri = URI.create(ServletUriComponentsBuilder
-//                .fromCurrentContextPath()
-//                .path("/games/{id}")
-//                .buildAndExpand(gameDto.getGameID())
-//                .toUriString());
-//
-//        return ResponseEntity.created(uri).body(gameDto);
-//    }
 
     // GetMapping to get all games
     @GetMapping("/admin/games")
@@ -44,12 +35,14 @@ public class GameController {
         return ResponseEntity.ok().body(gameDtos);
     }
 
-    // PostMapping to add a game AND assign it to a user
+
+    // PostMapping to add a game AND assign it to a user AND assign a game condition to the game
     @PostMapping("/users/{username}/games")
-    public ResponseEntity<GameDto> addGame(
+    public ResponseEntity<String> addGame(
             @PathVariable("username") String username,
-            @RequestBody GameDto dto) {
-        GameDto gameDto = gameService.addGame(dto);
+            @RequestBody GameAndConditionDto gameAndConditionDto) {
+        GameDto gameDto = gameService.addGame(gameAndConditionDto.getGameDto());
+        GameConditionDto gameConditionDto = gameConditionService.addGameCondition(gameAndConditionDto.getGameConditionDto());
 
         URI uri = URI.create(ServletUriComponentsBuilder
                 .fromCurrentContextPath()
@@ -58,9 +51,11 @@ public class GameController {
                 .toUriString());
 
         userService.assignGameToUser(username, gameDto.getGameID());
+        gameConditionService.assignGameCondition(gameConditionDto.getGameConditionID(), gameDto.getGameID());
 
-        return ResponseEntity.created(uri).body(gameDto);
+        return ResponseEntity.created(uri).body(gameDto.getGameName() + " added successfully to user " + username);
     }
+
 
     // PostMapping to upload a game photo to a game
     @PostMapping("/users/{username}/games/{gameID}/upload-game-photo")
