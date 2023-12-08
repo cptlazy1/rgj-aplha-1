@@ -9,14 +9,14 @@ INSERT INTO users (is_enabled, profile_is_private, email, password, role, userna
 VALUES (true, true, 'tik@groot.com', '$2a$12$IzA1Ja1LH4PSMoro9PeITO1etDlknPjSX1nLusgt1vi9c1uaEXdEK', 'ADMIN', 'tokkkie');
 
 -- Games
-INSERT INTO games (game_name, game_year_of_release, game_publisher, game_is_original)
-VALUES ('Sonic', 1991, 'Sega', true);
+INSERT INTO games (game_name, game_year_of_release, game_publisher, game_is_original, system_name)
+VALUES ('Sonic', 1991, 'Sega', true, 'MegaDrive');
 
-INSERT INTO games (game_name, game_year_of_release, game_publisher, game_is_original)
-VALUES ('Samurai ShoDown 2', 1994, 'SNK', true);
+INSERT INTO games (game_name, game_year_of_release, game_publisher, game_is_original, system_name)
+VALUES ('Samurai ShoDown 2', 1994, 'SNK', true, 'Neo-Geo');
 
-INSERT INTO games (game_name, game_year_of_release, game_publisher, game_is_original)
-VALUES ('Mario Bros 3', 1988, 'Nintendo', false);
+INSERT INTO games (game_name, game_year_of_release, game_publisher, game_is_original, system_name)
+VALUES ('Mario Bros 3', 1988, 'Nintendo', false, 'NES');
 
 --  Game systems
 INSERT INTO game_systems (game_system_name, game_system_brand, game_system_year_of_release, is_ready_to_play)

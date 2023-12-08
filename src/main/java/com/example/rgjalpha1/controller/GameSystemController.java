@@ -42,22 +42,6 @@ public class GameSystemController {
     }
 
 
-    // PostMapping to add game system AND assign it to a user
-//    @PostMapping("/users/{username}/game-systems")
-//    public ResponseEntity<GameSystemDto> addGameSystem(@PathVariable("username") String username, @RequestBody GameSystemDto dto) {
-//        GameSystemDto gameSystemDto = gameSystemService.addGameSystem(dto);
-//
-//        URI uri = URI.create(ServletUriComponentsBuilder
-//                .fromCurrentContextPath()
-//                .path("/users/{username}/game-systems/{id}")
-//                .buildAndExpand(username, gameSystemDto.getGameSystemID())
-//                .toUriString());
-//
-//        userService.assignGameSystemToUser(username, gameSystemDto.getGameSystemID());
-//
-//        return ResponseEntity.created(uri).body(gameSystemDto);
-//    }
-
     // PostMapping to add game system AND assign it to a user AND assign a game system condition to the game system
     @PostMapping("/users/{username}/game-systems")
     public ResponseEntity<String> addGameSystem(
@@ -81,7 +65,9 @@ public class GameSystemController {
 
     // PutMapping to update game system
     @PutMapping("/game-systems/{id}")
-    public ResponseEntity<GameSystemDto> updateGameSystem(@PathVariable("id") Long gameSystemID, @Valid @RequestBody GameSystemDto dto)  {
+    public ResponseEntity<GameSystemDto> updateGameSystem(
+            @PathVariable("id") Long gameSystemID,
+            @RequestBody GameSystemDto dto)  {
         GameSystemDto gameSystemDto = gameSystemService.updateGameSystem(gameSystemID, dto);
         return ResponseEntity.ok().body(gameSystemDto);
     }
@@ -93,12 +79,6 @@ public class GameSystemController {
         return ResponseEntity.noContent().build();
     }
 
-    // PutMapping to assign game condition to game system
-    @PutMapping("/game-systems/{gameSystemID}/game-system-conditions/{gameSystemConditionID}")
-    public ResponseEntity<String> assignGameSystemCondition(@PathVariable("gameSystemID") Long gameSystemID, @PathVariable("gameSystemConditionID") Long gameSystemConditionID)  {
-        gameSystemService.assignGameSystemCondition(gameSystemID, gameSystemConditionID);
-        return ResponseEntity.ok().body("Game system condition assigned successfully to game system");
-    }
 
     // PostMapping to upload a game system photo to a game system
     @PostMapping("/users/{username}/game-systems/{gameSystemID}/upload-game-system-photo")

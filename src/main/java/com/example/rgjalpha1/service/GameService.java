@@ -27,7 +27,6 @@ import java.util.Optional;
 public class GameService {
 
     private final GameRepository gameRepository;
-    private final GameConditionRepository gameConditionRepository;
     private final UserRepository userRepository;
 
     // Todo: add validation to every method
@@ -67,52 +66,44 @@ public class GameService {
     }
 
 
-
-    // Method to update game by gameID
-    public GameDto updateGame(Long gameID, GameDto gameDto) {
+    // Method to update game by username and gameID
+    public GameDto updateGame(String username, Long gameID, GameDto gameDto) {
 
         Optional<Game> gameOptional = gameRepository.findById(gameID);
+        Optional<User> userOptional = userRepository.findByUsername(username);
 
-        if (gameOptional.isPresent()) {
+        if (gameOptional.isPresent() && userOptional.isPresent()) {
             Game game = gameOptional.get();
-
-            // Todo: Manual null check for each field
             if (gameDto.getGameName() != null) {
                 game.setGameName(gameDto.getGameName());
+            }
+            if (gameDto.getGameYearOfRelease() != null) {
+                game.setGameYearOfRelease(gameDto.getGameYearOfRelease());
+            }
+            if (gameDto.getGamePublisher() != null) {
+                game.setGamePublisher(gameDto.getGamePublisher());
+            }
+            if (gameDto.getGameIsOriginal() != null) {
+                game.setGameIsOriginal(gameDto.getGameIsOriginal());
+            }
+            if (gameDto.getSystemName() != null) {
+                game.setSystemName(gameDto.getSystemName());
             }
 
             Game updatedGame = gameRepository.save(game);
             return convertToGameDto(updatedGame);
+
         } else {
             throw new RecordNotFoundException("No game record exists for given gameID");
         }
-
     }
+
 
     // Method to delete game by gameID
     public void deleteGame(Long gameID) {
         Optional<Game> gameOptional = gameRepository.findById(gameID);
         if (gameOptional.isPresent()) {
             gameRepository.deleteById(gameID);
-        } else {
-            throw new RecordNotFoundException("No game record exists for given gameID");
-        }
-    }
-
-    // Method to assign game condition to game
-    public void assignGameCondition(Long gameID, Long gameConditionID) {
-
-        Optional<Game> gameOptional = gameRepository.findById(gameID);
-        Optional<GameCondition> gameConditionOptional = gameConditionRepository.findById(gameConditionID);
-
-        if (gameOptional.isPresent() && gameConditionOptional.isPresent()) {
-
-            Game game = gameOptional.get();
-            GameCondition gameCondition = gameConditionOptional.get();
-
-            game.setGameCondition(gameCondition);
-            gameRepository.save(game);
-
         } else {
             throw new RecordNotFoundException("No game record exists for given gameID");
         }

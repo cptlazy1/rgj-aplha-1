@@ -19,9 +19,10 @@ public class Game {
     @Column(name = "game_id")
     private Long gameID;
     private String gameName;
-    private int gameYearOfRelease;
+    private Integer gameYearOfRelease;
     private String gamePublisher;
     private Boolean gameIsOriginal;
+    private String systemName;
 
 
     @Lob

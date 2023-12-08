@@ -20,21 +20,8 @@ public class GameSystemConditionController {
     private final GameSystemConditionService gameSystemConditionService;
     private final GameSystemConditionRepository gameSystemConditionRepository;
 
-    // PostMapping to add game system condition
-    @PostMapping("/game-system-conditions")
-    public ResponseEntity<GameSystemConditionDto> addGameSystemCondition(@Valid @RequestBody GameSystemConditionDto dto) {
-        GameSystemConditionDto gameSystemConditionDto = gameSystemConditionService.addGameSystemCondition(dto);
 
-        URI uri = URI.create(ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/game-system-conditions/{id}")
-                .buildAndExpand(gameSystemConditionDto.getGameSystemConditionID())
-                .toUriString());
-
-        return ResponseEntity.created(uri).body(gameSystemConditionDto);
-    }
-
-    // PutMapping to update game system condition by gameSystemConditionID with null check for the game system condition fields
+    // PutMapping to update game system condition by gameSystemConditionID
     @PutMapping("/game-system-conditions/{id}")
     public ResponseEntity<GameSystemConditionDto> updateGameSystemCondition(@PathVariable("id") Long gameSystemConditionID, @Valid @RequestBody GameSystemConditionDto dto) {
         Optional<GameSystemCondition> existingGameSystemCondition = gameSystemConditionRepository.findById(gameSystemConditionID);
@@ -53,6 +40,5 @@ public class GameSystemConditionController {
         }
     }
 
-    // PutMapping to assign game system condition to game system
 
 }

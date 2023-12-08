@@ -19,19 +19,6 @@ public class GameConditionController {
     private final GameConditionService gameConditionService;
     private final GameConditionRepository gameConditionRepository;
 
-    // PostMapping to add game condition
-    @PostMapping("/game-conditions")
-    public ResponseEntity<GameConditionDto> addGameCondition(@RequestBody GameConditionDto dto) {
-        GameConditionDto gameConditionDto = gameConditionService.addGameCondition(dto);
-        URI uri = URI.create(ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/game-conditions/{id}")
-                .buildAndExpand(gameConditionDto.getGameConditionID())
-                .toUriString());
-
-        return ResponseEntity.created(uri).body(gameConditionDto);
-    }
-
     // PutMapping to update game condition by gameConditionID
     @PutMapping("/game-conditions/{id}")
     public ResponseEntity<GameConditionDto> updateGameCondition(@PathVariable("id") Long gameConditionID, @RequestBody GameConditionDto dto) {
@@ -49,25 +36,6 @@ public class GameConditionController {
         else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    // PutMapping to assign game condition to game
-//    @PutMapping("users/{username}/games/{gameID}/game-conditions/{gameConditionID}")
-//    public ResponseEntity<String> assignGameCondition(
-//            @PathVariable("gameConditionID") Long gameConditionID,
-//            @PathVariable("gameID") Long gameID)  {
-//        gameConditionService.assignGameCondition(gameConditionID, gameID);
-//        return ResponseEntity.ok().body("Game condition with ID: " + gameConditionID +
-//                " has been assigned successfully to game with ID: " + gameID);
-//    }
-
-    @PostMapping("users/{username}/games/{gameID}/game-conditions/{gameConditionID}")
-    public ResponseEntity<String> assignGameCondition(
-            @PathVariable("gameConditionID") Long gameConditionID,
-            @PathVariable("gameID") Long gameID)  {
-        gameConditionService.assignGameCondition(gameConditionID, gameID);
-        return ResponseEntity.ok().body("Game condition with ID: " + gameConditionID +
-                " has been assigned successfully to game with ID: " + gameID);
     }
 
 }

@@ -94,24 +94,6 @@ public class GameSystemService {
         }
     }
 
-
-    // Method to assign game system condition to game system
-    public void assignGameSystemCondition(Long gameSystemID, Long gameSystemConditionID) {
-
-        Optional<GameSystem> gameSystemOptional = gameSystemRepository.findById(gameSystemID);
-        Optional<GameSystemCondition> gameSystemConditionOptional = gameSystemConditionRepository.findById(gameSystemConditionID);
-
-        if (gameSystemOptional.isPresent() && gameSystemConditionOptional.isPresent()) {
-            GameSystem gameSystem = gameSystemOptional.get();
-            GameSystemCondition gameSystemCondition = gameSystemConditionOptional.get();
-            gameSystem.setGameSystemCondition(gameSystemCondition);
-            gameSystemRepository.save(gameSystem);
-        } else {
-            throw new RecordNotFoundException("No game system record exists for given gameSystemID");
-        }
-    }
-
-
     // Method to upload game system photo
     public void uploadGameSystemPhoto(MultipartFile file, Long gameSystemID, String username) throws IOException {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));

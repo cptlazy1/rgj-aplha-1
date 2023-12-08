@@ -94,23 +94,14 @@ public class GameController {
     }
 
 
-    // PutMapping to update game by gameID
-    @PutMapping("/games/{id}")
+    // PutMapping to update game by username and gameID
+    @PutMapping("users/{username}/games/{id}")
     public ResponseEntity<GameDto> updateGame(
+            @PathVariable("username") String username,
             @PathVariable("id") Long gameID,
-            @RequestBody GameDto dto)  {
-        GameDto gameDto = gameService.updateGame(gameID, dto);
+            @RequestBody GameDto dto) {
+        GameDto gameDto = gameService.updateGame(username, gameID, dto);
         return ResponseEntity.ok().body(gameDto);
-    }
-
-
-    // Assign a game condition to a game
-    @PutMapping("/games/{gameID}/game-conditions/{gameConditionID}")
-    public ResponseEntity<String> assignGameCondition(
-            @PathVariable("gameID") Long gameID,
-            @PathVariable("gameConditionID") Long gameConditionID)  {
-        gameService.assignGameCondition(gameID, gameConditionID);
-        return ResponseEntity.ok().body("Game condition assigned successfully to game");
     }
 
 
