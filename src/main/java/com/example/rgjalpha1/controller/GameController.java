@@ -96,7 +96,9 @@ public class GameController {
 
     // PutMapping to update game by gameID
     @PutMapping("/games/{id}")
-    public ResponseEntity<GameDto> updateGame(@PathVariable("id") Long gameID, @RequestBody GameDto dto)  {
+    public ResponseEntity<GameDto> updateGame(
+            @PathVariable("id") Long gameID,
+            @RequestBody GameDto dto)  {
         GameDto gameDto = gameService.updateGame(gameID, dto);
         return ResponseEntity.ok().body(gameDto);
     }
@@ -104,7 +106,9 @@ public class GameController {
 
     // Assign a game condition to a game
     @PutMapping("/games/{gameID}/game-conditions/{gameConditionID}")
-    public ResponseEntity<String> assignGameCondition(@PathVariable("gameID") Long gameID, @PathVariable("gameConditionID") Long gameConditionID)  {
+    public ResponseEntity<String> assignGameCondition(
+            @PathVariable("gameID") Long gameID,
+            @PathVariable("gameConditionID") Long gameConditionID)  {
         gameService.assignGameCondition(gameID, gameConditionID);
         return ResponseEntity.ok().body("Game condition assigned successfully to game");
     }
@@ -112,7 +116,9 @@ public class GameController {
 
     // DeleteMapping to delete game by gameID
     @DeleteMapping("users/{username}/games/{id}")
-    public ResponseEntity<Void> deleteGame(@PathVariable("username") String username,  @PathVariable("id") Long gameID) {
+    public ResponseEntity<Void> deleteGame(
+            @PathVariable("username") String username,
+            @PathVariable("id") Long gameID) {
         gameService.deleteGame(gameID);
         return ResponseEntity.noContent().build();
     }

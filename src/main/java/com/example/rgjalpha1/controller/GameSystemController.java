@@ -1,7 +1,8 @@
 package com.example.rgjalpha1.controller;
 
-import com.example.rgjalpha1.dto.GameSystemDto;
-import com.example.rgjalpha1.dto.PhotoUploadResponse;
+import com.example.rgjalpha1.dto.*;
+import com.example.rgjalpha1.service.GameConditionService;
+import com.example.rgjalpha1.service.GameSystemConditionService;
 import com.example.rgjalpha1.service.GameSystemService;
 import com.example.rgjalpha1.service.UserService;
 import jakarta.validation.Valid;
@@ -22,6 +23,7 @@ public class GameSystemController {
 
     private final GameSystemService gameSystemService;
     private final UserService userService;
+    private final GameSystemConditionService gameSystemConditionService;
 
 
     // GetMapping to get all game systems
@@ -41,9 +43,28 @@ public class GameSystemController {
 
 
     // PostMapping to add game system AND assign it to a user
+//    @PostMapping("/users/{username}/game-systems")
+//    public ResponseEntity<GameSystemDto> addGameSystem(@PathVariable("username") String username, @RequestBody GameSystemDto dto) {
+//        GameSystemDto gameSystemDto = gameSystemService.addGameSystem(dto);
+//
+//        URI uri = URI.create(ServletUriComponentsBuilder
+//                .fromCurrentContextPath()
+//                .path("/users/{username}/game-systems/{id}")
+//                .buildAndExpand(username, gameSystemDto.getGameSystemID())
+//                .toUriString());
+//
+//        userService.assignGameSystemToUser(username, gameSystemDto.getGameSystemID());
+//
+//        return ResponseEntity.created(uri).body(gameSystemDto);
+//    }
+
+    // PostMapping to add game system AND assign it to a user AND assign a game system condition to the game system
     @PostMapping("/users/{username}/game-systems")
-    public ResponseEntity<GameSystemDto> addGameSystem(@PathVariable("username") String username, @RequestBody GameSystemDto dto) {
-        GameSystemDto gameSystemDto = gameSystemService.addGameSystem(dto);
+    public ResponseEntity<String> addGameSystem(
+            @PathVariable("username") String username,
+            @RequestBody GameSystemAndConditionDto gameSystemAndConditionDto) {
+        GameSystemDto gameSystemDto = gameSystemService.addGameSystem(gameSystemAndConditionDto.getGameSystemDto());
+        GameSystemConditionDto gameSystemConditionDto = gameSystemConditionService.addGameSystemCondition(gameSystemAndConditionDto.getGameSystemConditionDto());
 
         URI uri = URI.create(ServletUriComponentsBuilder
                 .fromCurrentContextPath()
@@ -52,9 +73,11 @@ public class GameSystemController {
                 .toUriString());
 
         userService.assignGameSystemToUser(username, gameSystemDto.getGameSystemID());
+        gameSystemConditionService.assignGameSystemCondition(gameSystemConditionDto.getGameSystemConditionID(), gameSystemDto.getGameSystemID());
 
-        return ResponseEntity.created(uri).body(gameSystemDto);
+        return ResponseEntity.created(uri).body(gameSystemDto.getGameSystemName() + " added successfully to user " + username);
     }
+
 
     // PutMapping to update game system
     @PutMapping("/game-systems/{id}")
