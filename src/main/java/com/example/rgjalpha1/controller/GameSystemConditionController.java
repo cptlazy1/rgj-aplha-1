@@ -22,16 +22,19 @@ public class GameSystemConditionController {
 
 
     // PutMapping to update game system condition by gameSystemConditionID
-    @PutMapping("/game-system-conditions/{id}")
-    public ResponseEntity<GameSystemConditionDto> updateGameSystemCondition(@PathVariable("id") Long gameSystemConditionID, @Valid @RequestBody GameSystemConditionDto dto) {
+    @PutMapping("/users/{username}/game-system-conditions/{id}")
+    public ResponseEntity<GameSystemConditionDto> updateGameSystemCondition(
+            @PathVariable("username") String username,
+            @PathVariable("id") Long gameSystemConditionID,
+            @RequestBody GameSystemConditionDto dto) {
         Optional<GameSystemCondition> existingGameSystemCondition = gameSystemConditionRepository.findById(gameSystemConditionID);
         if (existingGameSystemCondition.isPresent()) {
-            GameSystemConditionDto gameSystemConditionDto = gameSystemConditionService.updateGameSystemCondition(gameSystemConditionID, dto);
+            GameSystemConditionDto gameSystemConditionDto = gameSystemConditionService.updateGameSystemCondition(username, gameSystemConditionID, dto);
 
             URI uri = URI.create(ServletUriComponentsBuilder
                     .fromCurrentContextPath()
-                    .path("/game-system-conditions/{id}")
-                    .buildAndExpand(gameSystemConditionDto.getGameSystemConditionID())
+                    .path("/users/{username}/game-system-conditions/{id}")
+                    .buildAndExpand(username, gameSystemConditionDto.getGameSystemConditionID())
                     .toUriString());
 
             return ResponseEntity.created(uri).body(gameSystemConditionDto);

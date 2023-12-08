@@ -20,15 +20,18 @@ public class GameConditionController {
     private final GameConditionRepository gameConditionRepository;
 
     // PutMapping to update game condition by gameConditionID
-    @PutMapping("/game-conditions/{id}")
-    public ResponseEntity<GameConditionDto> updateGameCondition(@PathVariable("id") Long gameConditionID, @RequestBody GameConditionDto dto) {
+    @PutMapping("/users/{username}/game-conditions/{id}")
+    public ResponseEntity<GameConditionDto> updateGameCondition(
+            @PathVariable("username") String username,
+            @PathVariable("id") Long gameConditionID,
+            @RequestBody GameConditionDto dto) {
         Optional<GameCondition> existingGameCondition = gameConditionRepository.findById(gameConditionID);
         if (existingGameCondition.isPresent()) {
-            GameConditionDto gameConditionDto = gameConditionService.updateGameCondition(gameConditionID, dto);
+            GameConditionDto gameConditionDto = gameConditionService.updateGameCondition(username, gameConditionID, dto);
             URI uri = URI.create(ServletUriComponentsBuilder
                     .fromCurrentContextPath()
-                    .path("/game-conditions/{id}")
-                    .buildAndExpand(gameConditionDto.getGameConditionID())
+                    .path("/users/{username}/game-conditions/{id}")
+                    .buildAndExpand(username, gameConditionDto.getGameConditionID())
                     .toUriString());
 
             return ResponseEntity.created(uri).body(gameConditionDto);

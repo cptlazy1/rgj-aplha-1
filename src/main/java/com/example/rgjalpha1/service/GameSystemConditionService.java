@@ -5,8 +5,10 @@ import com.example.rgjalpha1.dto.GameSystemConditionDto;
 import com.example.rgjalpha1.exception.BadRequestException;
 import com.example.rgjalpha1.model.GameSystem;
 import com.example.rgjalpha1.model.GameSystemCondition;
+import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.GameSystemConditionRepository;
 import com.example.rgjalpha1.repository.GameSystemRepository;
+import com.example.rgjalpha1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class GameSystemConditionService {
 
     private final GameSystemConditionRepository gameSystemConditionRepository;
     private final GameSystemRepository gameSystemRepository;
+    private final UserRepository userRepository;
 
     // Method to null check for the game system condition fields
     public Boolean nullCheck(GameSystemConditionDto gameSystemConditionDto) throws BadRequestException {
@@ -29,7 +32,6 @@ public class GameSystemConditionService {
         } else if (gameSystemConditionDto.getIsModified() == null) {
             throw new BadRequestException("Game system condition Is Modified cannot be null");
         }
-
         else {
             return true;
         }
@@ -50,10 +52,14 @@ public class GameSystemConditionService {
 
 
     // Method to update game system condition by gameSystemConditionID
-    public GameSystemConditionDto updateGameSystemCondition(Long gameSystemConditionID, GameSystemConditionDto gameSystemConditionDto) {
+    public GameSystemConditionDto updateGameSystemCondition(
+            String username,
+            Long gameSystemConditionID,
+            GameSystemConditionDto gameSystemConditionDto) {
         if (nullCheck(gameSystemConditionDto)) {
             Optional<GameSystemCondition> existingGameSystemCondition = gameSystemConditionRepository.findById(gameSystemConditionID);
-            if (existingGameSystemCondition.isPresent()) {
+            Optional<User> existingUser = userRepository.findByUsername(username);
+            if (existingGameSystemCondition.isPresent() && existingUser.isPresent()) {
 
                 GameSystemCondition gameSystemCondition = existingGameSystemCondition.get();
                 gameSystemCondition.setHasBox(gameSystemConditionDto.getHasBox());

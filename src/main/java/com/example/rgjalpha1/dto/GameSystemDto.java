@@ -15,7 +15,7 @@ public class GameSystemDto {
     public Long gameSystemID;
     public String gameSystemName;
     public String gameSystemBrand;
-    public int gameSystemYearOfRelease;
+    public Integer gameSystemYearOfRelease;
     public Boolean isReadyToPlay;
 
 

@@ -76,6 +76,15 @@ public class GameSystemService {
             if (gameSystemDto.getGameSystemName() != null) {
                 gameSystem.setGameSystemName(gameSystemDto.getGameSystemName());
             }
+            if (gameSystemDto.getGameSystemBrand() != null) {
+                gameSystem.setGameSystemBrand(gameSystemDto.getGameSystemBrand());
+            }
+            if (gameSystemDto.getGameSystemYearOfRelease() != null) {
+                gameSystem.setGameSystemYearOfRelease(gameSystemDto.getGameSystemYearOfRelease());
+            }
+            if (gameSystemDto.getIsReadyToPlay() != null) {
+                gameSystem.setIsReadyToPlay(gameSystemDto.getIsReadyToPlay());
+            }
 
             GameSystem updatedGameSystem = gameSystemRepository.save(gameSystem);
             return convertToGameSystemDto(updatedGameSystem);
@@ -85,9 +94,10 @@ public class GameSystemService {
     }
 
     // Method to delete game system by gameSystemID
-    public void deleteGameSystem(Long gameSystemID) {
+    public void deleteGameSystem(String username, Long gameSystemID) {
         Optional<GameSystem> gameSystemOptional = gameSystemRepository.findById(gameSystemID);
-        if (gameSystemOptional.isPresent()) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (gameSystemOptional.isPresent() && userOptional.isPresent()) {
             gameSystemRepository.deleteById(gameSystemID);
         } else {
             throw new RecordNotFoundException("No game system record exists for given gameSystemID");

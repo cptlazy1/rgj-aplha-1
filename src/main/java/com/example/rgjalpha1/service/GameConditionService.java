@@ -4,8 +4,10 @@ import com.example.rgjalpha1.dto.GameConditionDto;
 import com.example.rgjalpha1.exception.BadRequestException;
 import com.example.rgjalpha1.model.Game;
 import com.example.rgjalpha1.model.GameCondition;
+import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.GameConditionRepository;
 import com.example.rgjalpha1.repository.GameRepository;
+import com.example.rgjalpha1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ public class GameConditionService {
 
     private final GameConditionRepository gameConditionRepository;
     private final GameRepository gameRepository;
+    private final UserRepository userRepository;
 
     // Todo: Method to null check for the game condition fields
     public Boolean nullCheck(GameConditionDto gameConditionDto) throws BadRequestException {
@@ -47,14 +50,21 @@ public class GameConditionService {
     }
 
 
-    public GameConditionDto updateGameCondition(Long gameConditionID, GameConditionDto gameConditionDto) {
+    public GameConditionDto updateGameCondition(
+            String username,
+            Long gameConditionID,
+            GameConditionDto gameConditionDto) {
         if (nullCheck(gameConditionDto)) {
             Optional<GameCondition> existingGameCondition = gameConditionRepository.findById(gameConditionID);
-            if (existingGameCondition.isPresent()) {
+            Optional<User> existingUser = userRepository.findByUsername(username);
+            if (existingGameCondition.isPresent() && existingUser.isPresent()) {
 
                 GameCondition gameCondition = existingGameCondition.get();
                 gameCondition.setHasManual(gameConditionDto.getHasManual());
                 gameCondition.setHasCase(gameConditionDto.getHasCase());
+                gameCondition.setHasStickers(gameConditionDto.getHasStickers());
+                gameCondition.setHasScratches(gameConditionDto.getHasScratches());
+                gameCondition.setHasWriting(gameConditionDto.getHasWriting());
 
                 GameCondition savedGameCondition = gameConditionRepository.save(gameCondition);
                 return convertToGameConditionDto(savedGameCondition);

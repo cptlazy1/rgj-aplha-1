@@ -64,7 +64,7 @@ public class GameSystemController {
 
 
     // PutMapping to update game system
-    @PutMapping("/game-systems/{id}")
+    @PutMapping("users/{username}/game-systems/{id}")
     public ResponseEntity<GameSystemDto> updateGameSystem(
             @PathVariable("id") Long gameSystemID,
             @RequestBody GameSystemDto dto)  {
@@ -73,9 +73,11 @@ public class GameSystemController {
     }
 
     // DeleteMapping to delete game system
-    @DeleteMapping("/game-systems/{id}")
-    public ResponseEntity<Void> deleteGameSystem(@PathVariable("id") Long gameSystemID) {
-        gameSystemService.deleteGameSystem(gameSystemID);
+    @DeleteMapping("users/{username}/game-systems/{id}")
+    public ResponseEntity<Void> deleteGameSystem(
+            @PathVariable("username") String username,
+            @PathVariable("id") Long gameSystemID) {
+        gameSystemService.deleteGameSystem(username, gameSystemID);
         return ResponseEntity.noContent().build();
     }
 
