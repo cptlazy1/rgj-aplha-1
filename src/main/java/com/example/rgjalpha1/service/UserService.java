@@ -9,13 +9,18 @@ import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.GameRepository;
 import com.example.rgjalpha1.repository.GameSystemRepository;
 import com.example.rgjalpha1.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -180,6 +185,38 @@ public class UserService {
         ModelMapper modelMapper = new ModelMapper();
         User user = modelMapper.map(userDto, User.class);
         return user;
+    }
+
+
+//    // Method to get user profile photo
+//    public Resource getProfilePhoto(String username, HttpServletRequest request) throws MalformedURLException {
+//        Optional<User> user = userRepository.findByUsername(username);
+//
+//        if (user.isEmpty()) {
+//            throw new UsernameNotFoundException("No user record exists for given username");
+//        } else {
+//            User user1 = user.get();
+//            String fileName = user1.getProfilePhotoFileName();
+//            Resource resource = new UrlResource("file:" + request.getServletContext().getRealPath("/WEB-INF/images/profile-photos/" + fileName));
+//            if (resource.exists()) {
+//                return resource;
+//            } else {
+//                throw new MalformedURLException("File not found " + fileName);
+//            }
+//        }
+//    }
+
+    // Method to get user profile photo
+    public UserDto getProfilePhoto(String filename) throws Exception {
+        Optional<User> user = userRepository.findByProfilePhotoFileName(filename);
+
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("No user record exists for given username");
+        } else {
+            User user1 = user.get();
+            UserDto userDto = convertToUserDto(user1);
+            return userDto;
+        }
     }
 
 
