@@ -1,5 +1,6 @@
 package com.example.rgjalpha1.validation;
 
+import com.example.rgjalpha1.exception.UsernameExistsException;
 import com.example.rgjalpha1.repository.UserRepository;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -12,6 +13,10 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext context) {
-        return username != null && !userRepository.existsByUsername(username);
+        if (username != null && !userRepository.existsByUsername(username)) {
+            throw new UsernameExistsException("Username already exists. Please choose another one");
+        }
+
+        return true;
     }
 }

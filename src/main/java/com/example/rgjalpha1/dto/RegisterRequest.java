@@ -24,5 +24,4 @@ public class RegisterRequest {
     @Email(message = "Please enter a valid email address")
     private String email;
 
-
 }
