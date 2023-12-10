@@ -4,6 +4,7 @@ import com.example.rgjalpha1.dto.AuthenticationRequest;
 import com.example.rgjalpha1.dto.AuthenticationResponse;
 import com.example.rgjalpha1.dto.RegisterRequest;
 import com.example.rgjalpha1.security.AuthenticationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(
-            @RequestBody RegisterRequest registerRequest
+           @Valid @RequestBody RegisterRequest registerRequest
     ) {
         authenticationService.register(registerRequest);
         return ResponseEntity.ok("Account for user: " + registerRequest.getUsername() + " is created!");
