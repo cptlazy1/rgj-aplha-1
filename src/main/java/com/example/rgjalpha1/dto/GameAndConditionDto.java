@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class GameAndConditionDto {
     @Valid
     public GameDto gameDto;
+    @Valid
     public GameConditionDto gameConditionDto;
 
 }

@@ -72,7 +72,7 @@ public class GameSystemService {
         if (gameSystemOptional.isPresent()) {
             GameSystem gameSystem = gameSystemOptional.get();
 
-            // ToDo: Manual null check for each field
+
             if (gameSystemDto.getGameSystemName() != null) {
                 gameSystem.setGameSystemName(gameSystemDto.getGameSystemName());
             }

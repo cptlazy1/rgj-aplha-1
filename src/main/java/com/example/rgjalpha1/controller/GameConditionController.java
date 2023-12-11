@@ -4,6 +4,7 @@ import com.example.rgjalpha1.dto.GameConditionDto;
 import com.example.rgjalpha1.model.GameCondition;
 import com.example.rgjalpha1.repository.GameConditionRepository;
 import com.example.rgjalpha1.service.GameConditionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class GameConditionController {
     public ResponseEntity<GameConditionDto> updateGameCondition(
             @PathVariable("username") String username,
             @PathVariable("id") Long gameConditionID,
-            @RequestBody GameConditionDto dto) {
+            @Valid @RequestBody GameConditionDto dto) {
         Optional<GameCondition> existingGameCondition = gameConditionRepository.findById(gameConditionID);
         if (existingGameCondition.isPresent()) {
             GameConditionDto gameConditionDto = gameConditionService.updateGameCondition(username, gameConditionID, dto);

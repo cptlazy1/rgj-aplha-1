@@ -26,7 +26,7 @@ public class GameSystemConditionController {
     public ResponseEntity<GameSystemConditionDto> updateGameSystemCondition(
             @PathVariable("username") String username,
             @PathVariable("id") Long gameSystemConditionID,
-            @RequestBody GameSystemConditionDto dto) {
+            @Valid @RequestBody GameSystemConditionDto dto) {
         Optional<GameSystemCondition> existingGameSystemCondition = gameSystemConditionRepository.findById(gameSystemConditionID);
         if (existingGameSystemCondition.isPresent()) {
             GameSystemConditionDto gameSystemConditionDto = gameSystemConditionService.updateGameSystemCondition(username, gameSystemConditionID, dto);

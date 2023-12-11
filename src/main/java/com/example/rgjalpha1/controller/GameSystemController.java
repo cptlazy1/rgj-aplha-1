@@ -58,7 +58,7 @@ public class GameSystemController {
     @PostMapping("/users/{username}/game-systems")
     public ResponseEntity<String> addGameSystem(
             @PathVariable("username") String username,
-            @RequestBody GameSystemAndConditionDto gameSystemAndConditionDto) {
+            @Valid @RequestBody GameSystemAndConditionDto gameSystemAndConditionDto) {
         GameSystemDto gameSystemDto = gameSystemService.addGameSystem(gameSystemAndConditionDto.getGameSystemDto());
         GameSystemConditionDto gameSystemConditionDto = gameSystemConditionService.addGameSystemCondition(gameSystemAndConditionDto.getGameSystemConditionDto());
 
@@ -79,7 +79,7 @@ public class GameSystemController {
     @PutMapping("users/{username}/game-systems/{id}")
     public ResponseEntity<GameSystemDto> updateGameSystem(
             @PathVariable("id") Long gameSystemID,
-            @RequestBody GameSystemDto dto)  {
+            @Valid @RequestBody GameSystemDto dto)  {
         GameSystemDto gameSystemDto = gameSystemService.updateGameSystem(gameSystemID, dto);
         return ResponseEntity.ok().body(gameSystemDto);
     }
