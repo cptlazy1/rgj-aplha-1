@@ -40,7 +40,7 @@ public class AuthenticationService {
 //        var jwToken = jwtService.generateToken(user);
 //        return AuthenticationResponse.builder()
 //                .jwToken(jwToken)
-//                .build();
+//                .build();w2
 //    }
 
     // Alternative register method without JWT

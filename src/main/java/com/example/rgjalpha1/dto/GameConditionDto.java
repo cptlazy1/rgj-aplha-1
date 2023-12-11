@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GameConditionDto {
 
-    // TODO: Add validation for the game condition fields
+
     public Long gameConditionID;
+    // Null checks are done in the service layer
     public Boolean hasManual;
     public Boolean hasCase;
     public Boolean hasScratches;

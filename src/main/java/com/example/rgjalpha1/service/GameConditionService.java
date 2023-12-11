@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,6 +30,12 @@ public class GameConditionService {
             throw new BadRequestException("Game condition Has Manual cannot be null");
         } else if (gameConditionDto.getHasCase() == null) {
             throw new BadRequestException("Game condition Has Case cannot be null");
+        } else if (gameConditionDto.getHasStickers() == null) {
+            throw new BadRequestException("Game condition Has Stickers cannot be null");
+        } else if (gameConditionDto.getHasScratches() == null) {
+            throw new BadRequestException("Game condition Has Scratches cannot be null");
+        } else if (gameConditionDto.getHasWriting() == null) {
+            throw new BadRequestException("Game condition Has Writing cannot be null");
         }
 
         else {
@@ -116,6 +124,16 @@ public class GameConditionService {
         }
     }
 
+    // Method to get all game conditions
+    public List<GameConditionDto> getAllGameConditions() {
+        List<GameCondition> gameConditions = gameConditionRepository.findAll();
+        List<GameConditionDto> gameConditionDtos = new ArrayList<>();
+        for (GameCondition gameCondition : gameConditions) {
+            GameConditionDto gameConditionDto = convertToGameConditionDto(gameCondition);
+            gameConditionDtos.add(gameConditionDto);
+        }
+        return gameConditionDtos;
+    }
 
     // Method to convert GameConditionDto to GameCondition
     public GameCondition convertToGameCondition(GameConditionDto gameConditionDto) {

@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +38,19 @@ public class GameSystemConditionService {
             return true;
         }
     }
+
+    // Method to get all game system conditions
+
+        public List<GameSystemConditionDto> getAllGameSystemConditions() {
+            List<GameSystemCondition> gameSystemConditions = gameSystemConditionRepository.findAll();
+            List<GameSystemConditionDto> gameSystemConditionDtos = new ArrayList<>();
+            for (GameSystemCondition gameSystemCondition : gameSystemConditions) {
+                GameSystemConditionDto gameSystemConditionDto = convertToGameSystemConditionDto(gameSystemCondition);
+                gameSystemConditionDtos.add(gameSystemConditionDto);
+            }
+            return gameSystemConditionDtos;
+        }
+
 
     // Method to add game system condition with null check for the game system condition ID
     public GameSystemConditionDto addGameSystemCondition(GameSystemConditionDto gameSystemConditionDto) {

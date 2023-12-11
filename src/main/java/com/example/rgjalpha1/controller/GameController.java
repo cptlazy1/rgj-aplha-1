@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,10 +30,36 @@ public class GameController {
 
 
     // GetMapping to get all games
+//    @GetMapping("/admin/games")
+//    public ResponseEntity<List<GameDto>> getAllGames() {
+//        List<GameDto> gameDtos = gameService.getAllGames();
+//        List<GameConditionDto> gameConditionDtos = gameConditionService.getAllGameConditions();
+//        return ResponseEntity.ok().body(gameDtos, gameConditionDtos);
+//    }
+
+
+    // Get all games and game conditions
+//    @GetMapping("/admin/games")
+//    public ResponseEntity<List<GameDto>> getAllGamesAndGameConditions() {
+//        List<GameDto> gameDtos = gameService.getAllGames();
+//        return ResponseEntity.ok().body(gameDtos);
+//    }
+
+    // GetMapping to get all games and game conditions
     @GetMapping("/admin/games")
-    public ResponseEntity<List<GameDto>> getAllGames() {
+    public ResponseEntity<List<GameAndConditionDto>> getAllGamesAndGameConditions() {
         List<GameDto> gameDtos = gameService.getAllGames();
-        return ResponseEntity.ok().body(gameDtos);
+        List<GameConditionDto> gameConditionDtos = gameConditionService.getAllGameConditions();
+
+        List<GameAndConditionDto> gameAndConditionDtos = new ArrayList<>();
+        for (int i = 0; i < gameDtos.size(); i++) {
+            GameAndConditionDto gameAndConditionDto = new GameAndConditionDto();
+            gameAndConditionDto.setGameDto(gameDtos.get(i));
+            gameAndConditionDto.setGameConditionDto(gameConditionDtos.get(i));
+            gameAndConditionDtos.add(gameAndConditionDto);
+        }
+
+        return ResponseEntity.ok().body(gameAndConditionDtos);
     }
 
 
@@ -106,6 +133,9 @@ public class GameController {
 
 
     // DeleteMapping to delete game by gameID
+    // Todo: Delete game condition when deleting game
+    // Todo: Delete game photo when deleting game
+    // Todo: Delete game from user when deleting game
     @DeleteMapping("users/{username}/games/{id}")
     public ResponseEntity<Void> deleteGame(
             @PathVariable("username") String username,

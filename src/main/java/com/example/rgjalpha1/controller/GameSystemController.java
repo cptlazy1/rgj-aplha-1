@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,12 +27,23 @@ public class GameSystemController {
     private final GameSystemConditionService gameSystemConditionService;
 
 
-    // GetMapping to get all game systems
+    // GetMapping to get all game systems and their conditions
     @GetMapping("/admin/game-systems")
-    public ResponseEntity<List<GameSystemDto>> getAllGameSystems() {
+    public ResponseEntity<List<GameSystemAndConditionDto>> getAllGameSystemsAndGameSystemConditions() {
         List<GameSystemDto> gameSystemDtos = gameSystemService.getAllGameSystems();
-        return ResponseEntity.ok().body(gameSystemDtos);
+        List<GameSystemConditionDto> gameSystemConditionDtos = gameSystemConditionService.getAllGameSystemConditions();
+
+        List<GameSystemAndConditionDto> gameSystemAndConditionDtos = new ArrayList<>();
+        for (int i = 0; i < gameSystemDtos.size(); i++) {
+            GameSystemAndConditionDto gameSystemAndConditionDto = new GameSystemAndConditionDto();
+            gameSystemAndConditionDto.setGameSystemDto(gameSystemDtos.get(i));
+            gameSystemAndConditionDto.setGameSystemConditionDto(gameSystemConditionDtos.get(i));
+            gameSystemAndConditionDtos.add(gameSystemAndConditionDto);
+        }
+
+        return ResponseEntity.ok().body(gameSystemAndConditionDtos);
     }
+
 
     // GetMapping to get all of a users game systems
     @GetMapping("/users/{username}/game-systems")
