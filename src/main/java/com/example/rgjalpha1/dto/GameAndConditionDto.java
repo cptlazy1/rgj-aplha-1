@@ -1,5 +1,6 @@
 package com.example.rgjalpha1.dto;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GameAndConditionDto {
-
+    @Valid
     public GameDto gameDto;
     public GameConditionDto gameConditionDto;
 

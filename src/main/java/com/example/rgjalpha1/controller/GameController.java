@@ -8,6 +8,7 @@ import com.example.rgjalpha1.dto.PhotoUploadResponse;
 import com.example.rgjalpha1.service.GameConditionService;
 import com.example.rgjalpha1.service.GameService;
 import com.example.rgjalpha1.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,22 +29,6 @@ public class GameController {
     private final UserService userService;
     private final GameConditionService gameConditionService;
 
-
-    // GetMapping to get all games
-//    @GetMapping("/admin/games")
-//    public ResponseEntity<List<GameDto>> getAllGames() {
-//        List<GameDto> gameDtos = gameService.getAllGames();
-//        List<GameConditionDto> gameConditionDtos = gameConditionService.getAllGameConditions();
-//        return ResponseEntity.ok().body(gameDtos, gameConditionDtos);
-//    }
-
-
-    // Get all games and game conditions
-//    @GetMapping("/admin/games")
-//    public ResponseEntity<List<GameDto>> getAllGamesAndGameConditions() {
-//        List<GameDto> gameDtos = gameService.getAllGames();
-//        return ResponseEntity.ok().body(gameDtos);
-//    }
 
     // GetMapping to get all games and game conditions
     @GetMapping("/admin/games")
@@ -67,7 +52,7 @@ public class GameController {
     @PostMapping("/users/{username}/games")
     public ResponseEntity<String> addGame(
             @PathVariable("username") String username,
-            @RequestBody GameAndConditionDto gameAndConditionDto) {
+            @Valid @RequestBody GameAndConditionDto gameAndConditionDto) {
         GameDto gameDto = gameService.addGame(gameAndConditionDto.getGameDto());
         GameConditionDto gameConditionDto = gameConditionService.addGameCondition(gameAndConditionDto.getGameConditionDto());
 

@@ -1,6 +1,7 @@
 package com.example.rgjalpha1.dto;
 
-import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,10 +17,11 @@ public class GameDto {
     // Todo: add validation for all fields
     public Long gameID;
 
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 50, message = "Game name must be between 1 and 50 characters")
     public String gameName;
-    @Digits(integer = 4, fraction = 0)
-    public Integer gameYearOfRelease; // Todo: validation must be between 1970 and current year and 4 digits
+    @Min(value = 1000, message = "Year of release must be 4 digits")
+    @Max(value = 9999, message = "Year of release must be 4 digits")
+    public Integer gameYearOfRelease;
     public String gamePublisher;
     public Boolean gameIsOriginal;
     public String systemName;
