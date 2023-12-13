@@ -1,6 +1,7 @@
 package com.example.rgjalpha1.repository;
 
 import com.example.rgjalpha1.model.User;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
@@ -14,6 +15,11 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository underTest;
+
+    @AfterEach
+    void tearDown() {
+        underTest.deleteAll();
+    }
 
     @Test
     void itShouldCheckIfUserDoesNotExistByUsername() {
@@ -55,7 +61,7 @@ class UserRepositoryTest {
     @Test
     void itShouldFindUserByProfilePhotoFileName() {
         // given
-        String profilePhotoFileName = "test";
+        String profilePhotoFileName = "test.png";
 
         // when
         // then
