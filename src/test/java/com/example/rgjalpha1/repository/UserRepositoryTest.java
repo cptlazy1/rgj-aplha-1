@@ -48,13 +48,27 @@ class UserRepositoryTest {
     }
 
     @Test
-    void itShouldFindUserByUsername() {
+    void itShouldNotFindUserByUsername() {
         // given
-        String username = "test";
+        String username = "test1999";
 
         // when
         // then
         assertThat(underTest.findByUsername(username)).isEmpty();
+
+    }
+
+    @Test
+    void itShouldFindUserByUsername() {
+        // given
+        User testUser = new User();
+        testUser.setUsername("test1976");
+
+        // when
+        underTest.save(testUser);
+
+        // then
+        assertThat(underTest.findByUsername(testUser.getUsername()).isPresent()).isTrue();
 
     }
 
