@@ -1,6 +1,7 @@
 package com.example.rgjalpha1.service;
 
 import com.example.rgjalpha1.model.Game;
+import com.example.rgjalpha1.model.GameSystem;
 import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.GameRepository;
 import com.example.rgjalpha1.repository.GameSystemRepository;
@@ -32,6 +33,8 @@ class UserServiceTest {
     private GameSystemRepository gameSystemRepository;
     private AutoCloseable autoCloseable;
     private UserService underTest;
+
+    // Todo: add additional tests for UserService to increase line coverage to 100%
 
     @BeforeEach
     void setUp() {
@@ -184,21 +187,22 @@ class UserServiceTest {
     void canAssignGameSystemToUser() {
         // given
         User user = new User();
-        Game game = new Game();
+        GameSystem gameSystem = new GameSystem();
         user.setUsername("testUser");
-        Long gameID = 1L;
+        Long gameSystemID = 1L;
 
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
-        when(gameRepository.findById(gameID)).thenReturn(Optional.of(game));
+        when(gameSystemRepository.findById(gameSystemID)).thenReturn(Optional.of(gameSystem));
 
         // when
-        underTest.assignGameToUser("testUser", gameID);
+        underTest.assignGameSystemToUser("testUser", gameSystemID);
 
         // then
         verify(userRepository).findByUsername("testUser");
-        verify(gameRepository).findById(1L);
-        assertTrue(user.getGames().contains(game));
-        assertEquals(user, game.getUser());
+        verify(gameSystemRepository).findById(gameSystemID);
+        assertTrue(user.getGameSystems().contains(gameSystem));
+        assertEquals(user, gameSystem.getUser());
         verify(userRepository).save(user);
+
     }
 }
