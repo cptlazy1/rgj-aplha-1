@@ -7,7 +7,6 @@ import com.example.rgjalpha1.repository.GameSystemRepository;
 import com.example.rgjalpha1.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -182,7 +181,6 @@ class UserServiceTest {
     }
 
     @Test
-    @Disabled
     void canAssignGameSystemToUser() {
         // given
         User user = new User();

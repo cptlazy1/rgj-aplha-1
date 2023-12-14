@@ -10,7 +10,6 @@ import com.example.rgjalpha1.repository.GameRepository;
 import com.example.rgjalpha1.repository.GameSystemRepository;
 import com.example.rgjalpha1.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -176,6 +175,7 @@ public class UserService {
     }
 
     // Method to convert UserDto to User with ModelMapper
+    // Todo: Remove this method if not needed
     private User convertToUser(UserDto userDto) {
         ModelMapper modelMapper = new ModelMapper();
         User user = modelMapper.map(userDto, User.class);
