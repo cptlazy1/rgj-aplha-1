@@ -9,7 +9,6 @@ import java.util.Optional;
 @Transactional // This annotation is needed to prevent the PSQLException: Large Objects may not be used in auto-commit mode
 public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByUsername(String username);
-    Optional<User> findByProfilePhotoFileName(String profilePhotoFileName);
 
     boolean existsByUsername(String username);
 }

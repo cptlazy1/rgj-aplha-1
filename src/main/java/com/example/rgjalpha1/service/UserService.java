@@ -188,37 +188,4 @@ public class UserService {
     }
 
 
-//    // Method to get user profile photo
-//    public Resource getProfilePhoto(String username, HttpServletRequest request) throws MalformedURLException {
-//        Optional<User> user = userRepository.findByUsername(username);
-//
-//        if (user.isEmpty()) {
-//            throw new UsernameNotFoundException("No user record exists for given username");
-//        } else {
-//            User user1 = user.get();
-//            String fileName = user1.getProfilePhotoFileName();
-//            Resource resource = new UrlResource("file:" + request.getServletContext().getRealPath("/WEB-INF/images/profile-photos/" + fileName));
-//            if (resource.exists()) {
-//                return resource;
-//            } else {
-//                throw new MalformedURLException("File not found " + fileName);
-//            }
-//        }
-//    }
-
-    // Method to get user profile photo
-    public UserDto getProfilePhoto(String filename) throws Exception {
-        Optional<User> user = userRepository.findByProfilePhotoFileName(filename);
-
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("No user record exists for given username");
-        } else {
-            User user1 = user.get();
-            UserDto userDto = convertToUserDto(user1);
-            return userDto;
-        }
-    }
-
-
-
 }

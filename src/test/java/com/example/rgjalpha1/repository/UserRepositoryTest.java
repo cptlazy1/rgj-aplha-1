@@ -21,16 +21,30 @@ class UserRepositoryTest {
         underTest.deleteAll();
     }
 
+//    @Test
+//    void itShouldCheckIfUserDoesNotExistByUsername() {
+//        // given
+//        String username = "test";
+//
+//        // when
+//        boolean exists = underTest.existsByUsername(username);
+//
+//        // then
+//        assertThat(exists).isFalse();
+//
+//    }
+
     @Test
     void itShouldCheckIfUserDoesNotExistByUsername() {
         // given
-        String username = "test";
+        User testUser = new User();
+        testUser.setUsername("test1976");
 
         // when
-        boolean exists = underTest.existsByUsername(username);
+        underTest.save(testUser);
 
         // then
-        assertThat(exists).isFalse();
+        assertThat(underTest.existsByUsername("test1976")).isTrue();
 
     }
 
@@ -72,13 +86,5 @@ class UserRepositoryTest {
 
     }
 
-    @Test
-    void itShouldFindUserByProfilePhotoFileName() {
-        // given
-        String profilePhotoFileName = "test.png";
 
-        // when
-        // then
-        assertThat(underTest.findByProfilePhotoFileName(profilePhotoFileName)).isEmpty();
-    }
 }
