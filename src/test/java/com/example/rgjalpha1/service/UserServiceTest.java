@@ -12,12 +12,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -69,8 +71,26 @@ class UserServiceTest {
     }
 
     @Test
-    @Disabled
-    void uploadProfilePhoto() {
+    void canUploadProfilePhoto() throws IOException {
+        // given
+        MultipartFile file = mock(MultipartFile.class);
+        User user = new User();
+        user.setUsername("testUser");
+        String fileName = "testFileName.png";
+        byte[] bytes = new byte[20];
+
+        when(file.getOriginalFilename()).thenReturn(fileName);
+        when(file.getBytes()).thenReturn(bytes);
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
+
+        // when
+        underTest.uploadProfilePhoto(file, "testUser");
+
+        // then
+        verify(userRepository).findByUsername("testUser");
+        assertEquals(fileName, user.getProfilePhotoFileName());
+        assertEquals(bytes, user.getProfilePhotoData());
+        verify(userRepository).save(user);
     }
 
     @Test
