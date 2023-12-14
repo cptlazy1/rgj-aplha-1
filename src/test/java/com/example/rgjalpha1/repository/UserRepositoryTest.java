@@ -21,18 +21,6 @@ class UserRepositoryTest {
         underTest.deleteAll();
     }
 
-//    @Test
-//    void itShouldCheckIfUserDoesNotExistByUsername() {
-//        // given
-//        String username = "test";
-//
-//        // when
-//        boolean exists = underTest.existsByUsername(username);
-//
-//        // then
-//        assertThat(exists).isFalse();
-//
-//    }
 
     @Test
     void itShouldCheckIfUserDoesNotExistByUsername() {

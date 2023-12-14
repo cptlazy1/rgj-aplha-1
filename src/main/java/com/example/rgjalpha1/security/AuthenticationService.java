@@ -44,6 +44,18 @@ public class AuthenticationService {
 //    }
 
     // Alternative register method without JWT
+    // ToDo: add a check if the username already exists. Like this example:
+//    public void addStudent(Student student) {
+//        Boolean existsEmail = studentRepository
+//                .selectExistsEmail(student.getEmail());
+//        if (existsEmail) {
+//            throw new BadRequestException(
+//                    "Email " + student.getEmail() + " taken");
+//        }
+//
+//        studentRepository.save(student);
+//    }
+
     public AuthenticationResponse register(RegisterRequest registerRequest) {
         var user = User
                 .builder()
