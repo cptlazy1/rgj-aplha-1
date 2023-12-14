@@ -1,5 +1,6 @@
 package com.example.rgjalpha1.service;
 
+import com.example.rgjalpha1.model.Game;
 import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.GameRepository;
 import com.example.rgjalpha1.repository.GameSystemRepository;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -94,27 +95,112 @@ class UserServiceTest {
     }
 
     @Test
-    @Disabled
-    void uploadGameRoomPhoto() {
+    void uploadGameRoomPhoto() throws IOException {
+        // given
+        MultipartFile file = mock(MultipartFile.class);
+        User user = new User();
+        user.setUsername("testUser");
+        String fileName = "testFileName.png";
+        byte[] bytes = new byte[20];
+
+        when(file.getOriginalFilename()).thenReturn(fileName);
+        when(file.getBytes()).thenReturn(bytes);
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
+
+        // when
+        underTest.uploadGameRoomPhoto(file, "testUser");
+
+        // then
+        verify(userRepository).findByUsername("testUser");
+        assertEquals(fileName, user.getGameRoomPhotoFileName());
+        assertEquals(bytes, user.getGameRoomPhotoData());
+        verify(userRepository).save(user);
+
+
     }
 
     @Test
-    @Disabled
-    void deleteProfilePhoto() {
+    void canDeleteProfilePhoto() {
+        // given
+        User user = new User();
+        user.setUsername("testUser");
+        user.setProfilePhotoFileName("testFileName.png");
+        user.setProfilePhotoData(new byte[20]);
+
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
+
+        // when
+        underTest.deleteProfilePhoto("testUser");
+
+        // then
+        verify(userRepository).findByUsername("testUser");
+        assertNull(user.getProfilePhotoFileName());
+        assertNull(user.getProfilePhotoData());
+        verify(userRepository).save(user);
     }
 
     @Test
-    @Disabled
     void deleteGameRoomPhoto() {
+        // given
+        User user = new User();
+        user.setUsername("testUser");
+        user.setGameRoomPhotoFileName("testFileName.png");
+        user.setGameRoomPhotoData(new byte[20]);
+
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
+
+        // when
+        underTest.deleteGameRoomPhoto("testUser");
+
+        // then
+        verify(userRepository).findByUsername("testUser");
+        assertNull(user.getGameRoomPhotoFileName());
+        assertNull(user.getGameRoomPhotoData());
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void canAssignGameToUser() {
+        // given
+        User user = new User();
+        Game game = new Game();
+        user.setUsername("testUser");
+        Long gameID = 1L;
+
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
+        when(gameRepository.findById(gameID)).thenReturn(Optional.of(game));
+
+        // when
+        underTest.assignGameToUser("testUser", gameID);
+
+        // then
+        verify(userRepository).findByUsername("testUser");
+        verify(gameRepository).findById(1L);
+        assertTrue(user.getGames().contains(game));
+        assertEquals(user, game.getUser());
+        verify(userRepository).save(user);
     }
 
     @Test
     @Disabled
-    void assignGameToUser() {
-    }
+    void canAssignGameSystemToUser() {
+        // given
+        User user = new User();
+        Game game = new Game();
+        user.setUsername("testUser");
+        Long gameID = 1L;
 
-    @Test
-    @Disabled
-    void assignGameSystemToUser() {
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
+        when(gameRepository.findById(gameID)).thenReturn(Optional.of(game));
+
+        // when
+        underTest.assignGameToUser("testUser", gameID);
+
+        // then
+        verify(userRepository).findByUsername("testUser");
+        verify(gameRepository).findById(1L);
+        assertTrue(user.getGames().contains(game));
+        assertEquals(user, game.getUser());
+        verify(userRepository).save(user);
     }
 }
