@@ -11,6 +11,7 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
     @Autowired
     private UserRepository userRepository;
 
+    // Todo: enforce unique username
     @Override
     public boolean isValid(String username, ConstraintValidatorContext context) {
         if (username != null && !userRepository.existsByUsername(username)) {

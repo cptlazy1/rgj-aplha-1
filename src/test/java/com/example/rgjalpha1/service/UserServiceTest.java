@@ -1,5 +1,7 @@
 package com.example.rgjalpha1.service;
 
+import com.example.rgjalpha1.exception.RecordNotFoundException;
+import com.example.rgjalpha1.exception.UsernameNotFoundException;
 import com.example.rgjalpha1.model.Game;
 import com.example.rgjalpha1.model.GameSystem;
 import com.example.rgjalpha1.model.User;
@@ -8,6 +10,7 @@ import com.example.rgjalpha1.repository.GameSystemRepository;
 import com.example.rgjalpha1.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -48,6 +51,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Can get all users")
     void canGetAllUsers() {
         // given
         List<User> expectedUsers = List.of(new User(), new User(), new User());
@@ -60,6 +64,19 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Throws exception when no users exist")
+    void getAllUsersThrowsException() {
+        // given
+        when(userRepository.findAll()).thenReturn(List.of());
+
+        // when
+        // then
+        assertThrows(RecordNotFoundException.class, () -> underTest.getAllUsers());
+    }
+
+
+    @Test
+    @DisplayName("Can get user by username")
     void canGetUserByUserName() {
         // given
         User expectedUser = new User();
@@ -74,6 +91,18 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Throws exception when no user exists for given username")
+    void getUserByUserNameThrowsException() {
+        // given
+        when(userRepository.findByUsername("username")).thenReturn(Optional.empty());
+
+        // when
+        // then
+        assertThrows(UsernameNotFoundException.class, () -> underTest.getUserByUserName("username"));
+    }
+
+    @Test
+    @DisplayName("Can upload a profile photo to a user")
     void canUploadProfilePhoto() throws IOException {
         // given
         MultipartFile file = mock(MultipartFile.class);
@@ -96,8 +125,44 @@ class UserServiceTest {
         verify(userRepository).save(user);
     }
 
+
     @Test
-    void uploadGameRoomPhoto() throws IOException {
+    @DisplayName("Throws exception when no user exists for given username when uploading profile photo")
+    void canUploadProfilePhotoThrowsUsernameNotFoundException() throws UsernameNotFoundException {
+        // given
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getOriginalFilename()).thenReturn("testFileName.png");
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(UsernameNotFoundException.class, () -> {
+            // when
+            underTest.uploadProfilePhoto(file, "testUser");
+            verify(userRepository).findByUsername("testUser");
+        });
+    }
+
+
+    @Test
+    @DisplayName("Throws exception when issue in uploading the profile photo to a user")
+    void canUploadProfilePhotoThrowsIOException() throws IOException {
+        // given
+        MultipartFile file = mock(MultipartFile.class);
+        User user = new User();
+        user.setUsername("testUser");
+        String fileName = "testFileName.png";
+
+        when(file.getOriginalFilename()).thenReturn(fileName);
+        when(file.getBytes()).thenThrow(new IOException("Test exception"));
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
+
+        // then
+        assertThrows(IOException.class, () -> underTest.uploadProfilePhoto(file, "testUser"));
+    }
+
+    @Test
+    @DisplayName("Can upload a game room photo to a user")
+    void canUploadGameRoomPhoto() throws IOException {
         // given
         MultipartFile file = mock(MultipartFile.class);
         User user = new User();
@@ -122,6 +187,40 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Throws exception when no user exists for given username when uploading game room photo")
+    void canUploadGameRoomPhotoThrowsUsernameNotFoundException() throws UsernameNotFoundException {
+        // given
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getOriginalFilename()).thenReturn("testFileName.png");
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(UsernameNotFoundException.class, () -> {
+            // when
+            underTest.uploadGameRoomPhoto(file, "testUser");
+            verify(userRepository).findByUsername("testUser");
+        });
+    }
+
+    @Test
+    @DisplayName("Throws exception when issue in uploading the game room photo to a user")
+    void canUploadGameRoomPhotoThrowsIOException() throws IOException {
+        // given
+        MultipartFile file = mock(MultipartFile.class);
+        User user = new User();
+        user.setUsername("testUser");
+        String fileName = "testFileName.png";
+
+        when(file.getOriginalFilename()).thenReturn(fileName);
+        when(file.getBytes()).thenThrow(new IOException("Test exception"));
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
+
+        // then
+        assertThrows(IOException.class, () -> underTest.uploadGameRoomPhoto(file, "testUser"));
+    }
+
+    @Test
+    @DisplayName("Can delete profile photo")
     void canDeleteProfilePhoto() {
         // given
         User user = new User();
@@ -139,6 +238,20 @@ class UserServiceTest {
         assertNull(user.getProfilePhotoFileName());
         assertNull(user.getProfilePhotoData());
         verify(userRepository).save(user);
+    }
+
+    @Test
+    @DisplayName("Throws exception when no user exists for given username when deleting profile photo")
+    void canDeleteProfilePhotoThrowsUsernameNotFoundException() throws UsernameNotFoundException {
+        // given
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(UsernameNotFoundException.class, () -> {
+            // when
+            underTest.deleteProfilePhoto("testUser");
+            verify(userRepository).findByUsername("testUser");
+        });
     }
 
     @Test
@@ -162,6 +275,21 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Throws exception when no user exists for given username when deleting game room photo")
+    void canDeleteGameRoomPhotoThrowsUsernameNotFoundException() throws UsernameNotFoundException {
+        // given
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(UsernameNotFoundException.class, () -> {
+            // when
+            underTest.deleteGameRoomPhoto("testUser");
+            verify(userRepository).findByUsername("testUser");
+        });
+    }
+
+    @Test
+    @DisplayName("Can assign game to user")
     void canAssignGameToUser() {
         // given
         User user = new User();
@@ -184,6 +312,24 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Throws exception when no user or game exists for given username or game when assigning game to user")
+    void canAssignGameToUserThrowsException() {
+        // given
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.empty());
+        when(gameRepository.findById(1L)).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(RecordNotFoundException.class, () -> {
+            // when
+            underTest.assignGameToUser("testUser", 1L);
+            verify(userRepository).findByUsername("testUser");
+            verify(gameRepository).findById(1L);
+        });
+    }
+
+
+    @Test
+    @DisplayName("Can assign game system to user")
     void canAssignGameSystemToUser() {
         // given
         User user = new User();
@@ -205,4 +351,22 @@ class UserServiceTest {
         verify(userRepository).save(user);
 
     }
+
+    @Test
+    @DisplayName("Throws exception when no user or game system exists for given username or game system ID when assigning game system to user")
+    void canAssignGameSystemToUserThrowsException() {
+        // given
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.empty());
+        when(gameSystemRepository.findById(1L)).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(RecordNotFoundException.class, () -> {
+            // when
+            underTest.assignGameSystemToUser("testUser", 1L);
+            verify(userRepository).findByUsername("testUser");
+            verify(gameSystemRepository).findById(1L);
+        });
+    }
+
+
 }
