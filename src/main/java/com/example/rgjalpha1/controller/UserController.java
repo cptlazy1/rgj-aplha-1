@@ -30,7 +30,7 @@ public class UserController {
     private final UserRepository userRepository;
 
     // GetMapping to get all users
-    @GetMapping("/admin")
+    @GetMapping("/admin/users")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> userDtos = userService.getAllUsers();
         return ResponseEntity.ok(userDtos);

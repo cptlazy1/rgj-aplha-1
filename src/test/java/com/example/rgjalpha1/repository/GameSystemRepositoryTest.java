@@ -1,50 +1,56 @@
 package com.example.rgjalpha1.repository;
 
+import com.example.rgjalpha1.model.Game;
 import com.example.rgjalpha1.model.GameSystem;
 import com.example.rgjalpha1.model.User;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
+import org.springframework.boot.test.context.SpringBootTest;
 
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
+@SpringBootTest
+@AutoConfigureDataJpa
 public class GameSystemRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private GameSystemRepository gameSystemRepository;
+    private GameSystemRepository underTest;
 
     @AfterEach
     public void tearDown() {
-        gameSystemRepository.deleteAll();
+        underTest.deleteAll();
         userRepository.deleteAll();
     }
 
+
     @Test
-    public void testFindAllByUserUsername() {
+    void itShouldFindAllGameSystemsByUserUsername() {
         // given
-        User user = new User();
-        user.setUsername("testUser");
+        User testUser = new User();
+        testUser.setUsername("test1976");
+        testUser = userRepository.save(testUser);
 
-        GameSystem gameSystem = new GameSystem();
-        gameSystem.setUser(user);
-        user.getGameSystems().add(gameSystem);
-
-        userRepository.save(user);
-        gameSystemRepository.save(gameSystem);
+        GameSystem testGameSystem = new GameSystem();
+        testGameSystem.setGameSystemName("testSystem");
+        testGameSystem.setUser(testUser);
+        underTest.save(testGameSystem);
 
         // when
+        List<GameSystem> gameSystems = underTest.findAllByUserUsername("test1976");
 
-        List<GameSystem> found = gameSystemRepository.findAllByUserUsername(user.getUsername());
         // then
-        assertThat(found).isNotEmpty();
-        assertThat(found.get(0).getUser()).isEqualTo(user);
+        assertThat(gameSystems).contains(testGameSystem);
     }
+
+
 }

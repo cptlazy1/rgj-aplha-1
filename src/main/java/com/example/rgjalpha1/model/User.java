@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -29,7 +30,6 @@ public class User implements UserDetails {
 
     private String password;
     private String email;
-//    private Boolean profileIsPrivate;
     private Boolean isEnabled;
 
     @Enumerated(value = EnumType.STRING)
@@ -37,12 +37,14 @@ public class User implements UserDetails {
 
     @OneToMany(
             mappedBy = "user",
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Game> games = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "user",
+            fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     @JsonIgnore
     private List<GameSystem> gameSystems = new ArrayList<>();
@@ -91,4 +93,20 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(username, user.username);
+        // exclude gameSystems from equals to prevent StackOverFlow exception
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
+        // exclude gameSystems from hashCode to prevent StackOverFlow exception
+    }
+
 }

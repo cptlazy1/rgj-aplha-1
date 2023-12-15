@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -37,6 +39,20 @@ public class GameSystem {
             orphanRemoval = true)
     @JoinColumn(name = "game_system_condition_id")
     private GameSystemCondition gameSystemCondition;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        GameSystem that = (GameSystem) o;
+        return Objects.equals(gameSystemID, that.gameSystemID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(gameSystemID);
+    }
 
 }
 
