@@ -26,7 +26,6 @@ import java.util.Optional;
 public class GameSystemService {
 
     private final GameSystemRepository gameSystemRepository;
-    private final GameSystemConditionRepository gameSystemConditionRepository;
     private final UserRepository userRepository;
 
     // Method to add game system with null check for the game system name

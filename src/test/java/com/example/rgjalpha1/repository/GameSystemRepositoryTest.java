@@ -1,12 +1,9 @@
 package com.example.rgjalpha1.repository;
 
-import com.example.rgjalpha1.model.Game;
 import com.example.rgjalpha1.model.GameSystem;
 import com.example.rgjalpha1.model.User;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.context.SpringBootTest;

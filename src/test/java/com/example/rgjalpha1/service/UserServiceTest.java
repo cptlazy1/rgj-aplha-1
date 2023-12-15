@@ -37,8 +37,6 @@ class UserServiceTest {
     private AutoCloseable autoCloseable;
     private UserService underTest;
 
-    // Todo: add additional tests for UserService to increase line coverage to 100%
-
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
