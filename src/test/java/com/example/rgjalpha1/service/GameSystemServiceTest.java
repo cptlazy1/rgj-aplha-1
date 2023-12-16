@@ -69,7 +69,7 @@ class GameSystemServiceTest {
 
         // then
         gameSystemDto.setGameSystemID(1L);
-        gameSystemDto.setGameSystemYearOfRelease(0); // this field is an Integer, so it will be null if not set
+        gameSystemDto.setGameSystemYearOfRelease(0); // this field is an Integer, so it will be null if it is not set
         assertThat(expected).isEqualTo(gameSystemDto);
         verify(gameSystemRepository).save(any(GameSystem.class));
     }
@@ -132,6 +132,7 @@ class GameSystemServiceTest {
 
 
     @Test
+    @DisplayName("It should update game system with all fields")
     void itShouldUpdateGameSystemWithAllFields() {
         // given
         Long gameSystemID = 1L;
@@ -156,6 +157,7 @@ class GameSystemServiceTest {
     }
 
     @Test
+    @DisplayName("It should update game system with some fields null")
     void itShouldUpdateGameSystemWithSomeFieldsNull() {
         // given
         Long gameSystemID = 1L;
@@ -177,6 +179,7 @@ class GameSystemServiceTest {
     }
 
     @Test
+    @DisplayName("It should throw RecordNotFoundException when game system does not exist")
     void itShouldThrowRecordNotFoundExceptionWhenGameSystemDoesNotExist() {
         // given
         Long gameSystemID = 1L;
@@ -187,13 +190,6 @@ class GameSystemServiceTest {
         // then
         assertThrows(RecordNotFoundException.class, () -> underTest.updateGameSystem(gameSystemID, gameSystemDto));
     }
-
-
-
-
-
-
-
 
 
     @Test
@@ -279,7 +275,7 @@ class GameSystemServiceTest {
     }
 
     @Test
-    @DisplayName("Throws exception when no user exists for given username when uploading game system photo")
+    @DisplayName("Can upload game system photo throws RecordNotFoundException for user")
     void canUploadGameSystemPhotoThrowsRecordNotFoundExceptionForUser() throws RecordNotFoundException {
         // given
         MultipartFile file = mock(MultipartFile.class);
@@ -297,7 +293,7 @@ class GameSystemServiceTest {
     }
 
     @Test
-    @DisplayName("Throws exception when issue in uploading the file")
+    @DisplayName("Can upload game system photo throws IOException")
     void canUploadGameSystemPhotoThrowsIOException() throws IOException {
         // given
         MultipartFile file = mock(MultipartFile.class);

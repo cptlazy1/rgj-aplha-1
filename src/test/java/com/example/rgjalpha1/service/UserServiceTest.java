@@ -253,6 +253,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Can delete game room photo")
     void deleteGameRoomPhoto() {
         // given
         User user = new User();
