@@ -27,9 +27,11 @@ public class GameSystemConditionController {
             @PathVariable("username") String username,
             @PathVariable("id") Long gameSystemConditionID,
             @Valid @RequestBody GameSystemConditionDto dto) {
-        Optional<GameSystemCondition> existingGameSystemCondition = gameSystemConditionRepository.findById(gameSystemConditionID);
+        Optional<GameSystemCondition> existingGameSystemCondition =
+                gameSystemConditionRepository.findById(gameSystemConditionID);
         if (existingGameSystemCondition.isPresent()) {
-            GameSystemConditionDto gameSystemConditionDto = gameSystemConditionService.updateGameSystemCondition(username, gameSystemConditionID, dto);
+            GameSystemConditionDto gameSystemConditionDto =
+                    gameSystemConditionService.updateGameSystemCondition(username, gameSystemConditionID, dto);
 
             URI uri = URI.create(ServletUriComponentsBuilder
                     .fromCurrentContextPath()

@@ -59,8 +59,10 @@ public class GameSystemController {
     public ResponseEntity<String> addGameSystem(
             @PathVariable("username") String username,
             @Valid @RequestBody GameSystemAndConditionDto gameSystemAndConditionDto) {
-        GameSystemDto gameSystemDto = gameSystemService.addGameSystem(gameSystemAndConditionDto.getGameSystemDto());
-        GameSystemConditionDto gameSystemConditionDto = gameSystemConditionService.addGameSystemCondition(gameSystemAndConditionDto.getGameSystemConditionDto());
+        GameSystemDto gameSystemDto =
+                gameSystemService.addGameSystem(gameSystemAndConditionDto.getGameSystemDto());
+        GameSystemConditionDto gameSystemConditionDto =
+                gameSystemConditionService.addGameSystemCondition(gameSystemAndConditionDto.getGameSystemConditionDto());
 
         URI uri = URI.create(ServletUriComponentsBuilder
                 .fromCurrentContextPath()
@@ -69,9 +71,11 @@ public class GameSystemController {
                 .toUriString());
 
         userService.assignGameSystemToUser(username, gameSystemDto.getGameSystemID());
-        gameSystemConditionService.assignGameSystemCondition(gameSystemConditionDto.getGameSystemConditionID(), gameSystemDto.getGameSystemID());
+        gameSystemConditionService.assignGameSystemCondition(gameSystemConditionDto
+                .getGameSystemConditionID(), gameSystemDto.getGameSystemID());
 
-        return ResponseEntity.created(uri).body(gameSystemDto.getGameSystemName() + " added successfully to user " + username);
+        return ResponseEntity.created(uri)
+                .body(gameSystemDto.getGameSystemName() + " added successfully to user " + username);
     }
 
 

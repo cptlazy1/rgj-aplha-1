@@ -100,7 +100,10 @@ public class UserController {
 
     // GetMapping to download a profile photo by username
     @GetMapping("/users/{username}/download-pp/{fileName}")
-    public ResponseEntity<byte[]> downloadProfilePhoto(@PathVariable String username, @PathVariable String fileName) throws Exception {
+    public ResponseEntity<byte[]> downloadProfilePhoto(
+            @PathVariable String username,
+            @PathVariable String fileName) throws Exception {
+
         Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isEmpty()) {
@@ -119,7 +122,10 @@ public class UserController {
 
     // GetMapping to download a game room photo by username
     @GetMapping("/users/{username}/download-grp/{fileName}")
-    public ResponseEntity<byte[]> downloadGameRoomPhoto(@PathVariable String username, @PathVariable String fileName) throws Exception {
+    public ResponseEntity<byte[]> downloadGameRoomPhoto(
+            @PathVariable String username,
+            @PathVariable String fileName) throws Exception {
+
         Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isEmpty()) {

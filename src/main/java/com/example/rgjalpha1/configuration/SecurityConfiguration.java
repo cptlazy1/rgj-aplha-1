@@ -5,7 +5,6 @@ import com.example.rgjalpha1.security.UserAuthorizationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,12 +29,15 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/authentication/**").permitAll() // All users can access this end-point
-                                .requestMatchers("/admin/**").hasAuthority("ADMIN") // Only admin can access this end-point
-                                .requestMatchers("/users/{username}/**").access(new UserAuthorizationManager()) // Only the user with the same username can access this end-point
-                                .requestMatchers("/users/{username}/games/{gameID}/upload-game-photo").access(new UserAuthorizationManager()) // Only the user with the same username can access this end-point
+                                .requestMatchers("/authentication/**").permitAll()
+                                // All users can access this end-point
+                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                                // Only admin can access this end-point
+                                .requestMatchers("/users/{username}/**").access(new UserAuthorizationManager())
+                                // Only the user with the same username can access this end-point
 
-                                .anyRequest().authenticated()
+                                .anyRequest().denyAll()
+
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(

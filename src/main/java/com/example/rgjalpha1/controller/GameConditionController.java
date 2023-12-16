@@ -26,9 +26,13 @@ public class GameConditionController {
             @PathVariable("username") String username,
             @PathVariable("id") Long gameConditionID,
             @Valid @RequestBody GameConditionDto dto) {
+
         Optional<GameCondition> existingGameCondition = gameConditionRepository.findById(gameConditionID);
+
         if (existingGameCondition.isPresent()) {
-            GameConditionDto gameConditionDto = gameConditionService.updateGameCondition(username, gameConditionID, dto);
+            GameConditionDto gameConditionDto =
+                    gameConditionService.updateGameCondition(username, gameConditionID, dto);
+
             URI uri = URI.create(ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("/users/{username}/game-conditions/{id}")

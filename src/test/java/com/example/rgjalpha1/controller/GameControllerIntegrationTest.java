@@ -71,7 +71,8 @@ class GameControllerIntegrationTest {
                         .content(requestJson))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("Sonic 666 added successfully to user " + user.getUsername())));
+                .andExpect(content()
+                        .string(containsString("Sonic 666 added successfully to user " + user.getUsername())));
 
     }
 
@@ -126,7 +127,8 @@ class GameControllerIntegrationTest {
         String contentType = "image/jpeg";
 
         byte[] content = new byte[20];
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", originalFilename, contentType, content);
+        MockMultipartFile mockMultipartFile =
+                new MockMultipartFile("file", originalFilename, contentType, content);
 
         User user = new User();
         user.setUsername("testUser");
@@ -140,7 +142,8 @@ class GameControllerIntegrationTest {
         testEntityManager.flush();
 
         this.mockMvc
-                .perform(multipart("/users/{username}/games/{gameID}/upload-game-photo", "testUser", game.getGameID())
+                .perform(multipart("/users/{username}/games/{gameID}/upload-game-photo",
+                        "testUser", game.getGameID())
                         .file(mockMultipartFile))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())

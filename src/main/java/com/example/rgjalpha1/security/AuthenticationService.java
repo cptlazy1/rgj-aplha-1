@@ -3,6 +3,7 @@ package com.example.rgjalpha1.security;
 import com.example.rgjalpha1.dto.AuthenticationRequest;
 import com.example.rgjalpha1.dto.AuthenticationResponse;
 import com.example.rgjalpha1.dto.RegisterRequest;
+import com.example.rgjalpha1.exception.BadRequestException;
 import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.UserRepository;
 import com.example.rgjalpha1.role.Role;
@@ -26,7 +27,7 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
-    // Original register method with JWT
+//     Register method with JWT. User gets a token after registration and does not need to log in again.
 //    public AuthenticationResponse register(RegisterRequest registerRequest) {
 //        var user = User
 //                .builder()
@@ -40,35 +41,31 @@ public class AuthenticationService {
 //        var jwToken = jwtService.generateToken(user);
 //        return AuthenticationResponse.builder()
 //                .jwToken(jwToken)
-//                .build();w2
+//                .build();
 //    }
 
-    // Alternative register method without JWT
-    // ToDo: add a check if the username already exists. Like this example:
-//    public void addStudent(Student student) {
-//        Boolean existsEmail = studentRepository
-//                .selectExistsEmail(student.getEmail());
-//        if (existsEmail) {
-//            throw new BadRequestException(
-//                    "Email " + student.getEmail() + " taken");
-//        }
-//
-//        studentRepository.save(student);
-//    }
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
-        var user = User
-                .builder()
-                .username(registerRequest.getUsername())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .email(registerRequest.getEmail())
-                .role(Role.USER)
-                .build();
 
-        userRepository.save(user);
+        if (userRepository.existsByUsername(registerRequest.getUsername())) {
+            throw new BadRequestException("Username already exists. Please choose another one.");
+        } else {
 
-        return AuthenticationResponse.builder().build();
+            var user = User
+                    .builder()
+                    .username(registerRequest.getUsername())
+                    .password(passwordEncoder.encode(registerRequest.getPassword()))
+                    .email(registerRequest.getEmail())
+                    .role(Role.USER)
+                    .build();
+
+            userRepository.save(user);
+
+            return AuthenticationResponse.builder().build();
+        }
     }
+
+
 
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(

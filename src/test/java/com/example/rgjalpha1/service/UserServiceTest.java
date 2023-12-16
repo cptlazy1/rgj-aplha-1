@@ -352,7 +352,8 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Throws exception when no user or game system exists for given username or game system ID when assigning game system to user")
+    @DisplayName("Throws exception when no user or game system exists " +
+            "for given username or game system ID when assigning game system to user")
     void canAssignGameSystemToUserThrowsException() {
         // given
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.empty());

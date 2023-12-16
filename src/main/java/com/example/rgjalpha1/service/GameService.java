@@ -4,9 +4,8 @@ import com.example.rgjalpha1.dto.GameDto;
 import com.example.rgjalpha1.exception.BadRequestException;
 import com.example.rgjalpha1.exception.RecordNotFoundException;
 import com.example.rgjalpha1.model.Game;
-import com.example.rgjalpha1.model.GameCondition;
+
 import com.example.rgjalpha1.model.User;
-import com.example.rgjalpha1.repository.GameConditionRepository;
 import com.example.rgjalpha1.repository.GameRepository;
 import com.example.rgjalpha1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

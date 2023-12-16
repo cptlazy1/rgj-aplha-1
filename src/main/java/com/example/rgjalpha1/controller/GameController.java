@@ -1,6 +1,5 @@
 package com.example.rgjalpha1.controller;
 
-
 import com.example.rgjalpha1.dto.GameAndConditionDto;
 import com.example.rgjalpha1.dto.GameConditionDto;
 import com.example.rgjalpha1.dto.GameDto;
@@ -34,6 +33,7 @@ public class GameController {
     // GetMapping to get all games and game conditions
     @GetMapping("/admin/games")
     public ResponseEntity<List<GameAndConditionDto>> getAllGamesAndGameConditions() {
+
         List<GameDto> gameDtos = gameService.getAllGames();
         List<GameConditionDto> gameConditionDtos = gameConditionService.getAllGameConditions();
 
@@ -55,7 +55,8 @@ public class GameController {
             @PathVariable("username") String username,
             @Valid @RequestBody GameAndConditionDto gameAndConditionDto) {
         GameDto gameDto = gameService.addGame(gameAndConditionDto.getGameDto());
-        GameConditionDto gameConditionDto = gameConditionService.addGameCondition(gameAndConditionDto.getGameConditionDto());
+        GameConditionDto gameConditionDto =
+                gameConditionService.addGameCondition(gameAndConditionDto.getGameConditionDto());
 
         URI uri = URI.create(ServletUriComponentsBuilder
                 .fromCurrentContextPath()

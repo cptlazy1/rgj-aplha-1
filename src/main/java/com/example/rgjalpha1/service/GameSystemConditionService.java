@@ -1,6 +1,5 @@
 package com.example.rgjalpha1.service;
 
-
 import com.example.rgjalpha1.dto.GameSystemConditionDto;
 import com.example.rgjalpha1.exception.BadRequestException;
 import com.example.rgjalpha1.model.GameSystem;
@@ -72,7 +71,8 @@ public class GameSystemConditionService {
             Long gameSystemConditionID,
             GameSystemConditionDto gameSystemConditionDto) {
         if (nullCheck(gameSystemConditionDto)) {
-            Optional<GameSystemCondition> existingGameSystemCondition = gameSystemConditionRepository.findById(gameSystemConditionID);
+            Optional<GameSystemCondition> existingGameSystemCondition =
+                    gameSystemConditionRepository.findById(gameSystemConditionID);
             Optional<User> existingUser = userRepository.findByUsername(username);
             if (existingGameSystemCondition.isPresent() && existingUser.isPresent()) {
 
@@ -81,7 +81,8 @@ public class GameSystemConditionService {
                 gameSystemCondition.setHasCables(gameSystemConditionDto.getHasCables());
                 gameSystemCondition.setIsModified(gameSystemConditionDto.getIsModified());
 
-                GameSystemCondition updatedGameSystemCondition = gameSystemConditionRepository.save(gameSystemCondition);
+                GameSystemCondition updatedGameSystemCondition =
+                        gameSystemConditionRepository.save(gameSystemCondition);
                 return convertToGameSystemConditionDto(updatedGameSystemCondition);
             } else {
                 throw new BadRequestException("No game system condition record exists for given gameSystemConditionID");
@@ -95,7 +96,8 @@ public class GameSystemConditionService {
     // Method to assign game system condition to game system
     public void assignGameSystemCondition(Long gameSystemID, Long gameSystemConditionID) {
 
-        Optional<GameSystemCondition> gameSystemConditionOptional = gameSystemConditionRepository.findById(gameSystemConditionID);
+        Optional<GameSystemCondition> gameSystemConditionOptional =
+                gameSystemConditionRepository.findById(gameSystemConditionID);
         Optional<GameSystem> gameSystemOptional = gameSystemRepository.findById(gameSystemID);
 
         if (gameSystemConditionOptional.isPresent() && gameSystemOptional.isPresent()) {
