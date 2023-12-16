@@ -78,9 +78,9 @@ public class GameController {
 
             String downloadUrl = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
-                    .path("users/{username}/games/")
+                    .path("users/"+ username +"/games/")
                     .path(gameID.toString())
-                    .path("/download-game-photo")
+                    .path("/download-game-photo/")
                     .path(Objects.requireNonNull(file.getOriginalFilename()))
                     .toUriString();
 
@@ -94,6 +94,16 @@ public class GameController {
             photoUploadResponse.setContentType(contentType);
 
             return photoUploadResponse;
+    }
+
+    // GetMapping to download a game photo
+    @GetMapping("/users/{username}/games/{gameID}/download-game-photo/{fileName:.+}")
+    public ResponseEntity<byte[]> downloadGamePhoto(
+            @PathVariable("username") String username,
+            @PathVariable("gameID") Long gameID,
+            @PathVariable("fileName") String fileName) {
+        byte[] image = gameService.downloadGamePhoto(gameID, username, fileName);
+        return ResponseEntity.ok().body(image);
     }
 
 

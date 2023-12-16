@@ -12,16 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
@@ -118,6 +117,34 @@ class GameControllerIntegrationTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk());
 
+
+    }
+
+    @Test
+    void shouldUploadGamePhoto() throws Exception {
+        String originalFilename = "testPhoto.jpg";
+        String contentType = "image/jpeg";
+        byte[] content = new byte[20];
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", originalFilename, contentType, content);
+
+        User user = new User();
+        user.setUsername("testUser");
+        testEntityManager.persist(user);
+
+        Game game = new Game();
+        game.setGameName("Shadow of the Beast");
+        game.setUser(user);
+        testEntityManager.persist(game);
+
+        testEntityManager.flush();
+
+        this.mockMvc
+                .perform(multipart("/users/{username}/games/{gameID}/upload-game-photo", "testUser", game.getGameID())
+                        .file(mockMultipartFile))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.fileName").value(originalFilename))
+                .andExpect(jsonPath("$.fileDownloadURL").value(containsString("/users/testUser/games/" + game.getGameID() + "/download-pp")))
+                .andExpect(jsonPath("$.contentType").value(contentType));
 
     }
 
