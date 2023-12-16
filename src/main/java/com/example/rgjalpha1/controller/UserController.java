@@ -45,6 +45,7 @@ public class UserController {
     }
 
 
+    // PostMapping to upload a profile photo to a user
     @PostMapping("/users/{username}/upload-pp")
     public ResponseEntity<PhotoUploadResponse> uploadProfilePhoto(
             @PathVariable("username") String username,
@@ -112,7 +113,7 @@ public class UserController {
 
             byte[] photoData = user1.getProfilePhotoData();
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                    "attachment;fileName=" + user1.getProfilePhotoFileName()).body(photoData);
+                    "attachment; fileName=" + user1.getProfilePhotoFileName()).body(photoData);
         }
     }
 

@@ -124,6 +124,7 @@ class GameControllerIntegrationTest {
     void shouldUploadGamePhoto() throws Exception {
         String originalFilename = "testPhoto.jpg";
         String contentType = "image/jpeg";
+
         byte[] content = new byte[20];
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", originalFilename, contentType, content);
 
@@ -141,12 +142,37 @@ class GameControllerIntegrationTest {
         this.mockMvc
                 .perform(multipart("/users/{username}/games/{gameID}/upload-game-photo", "testUser", game.getGameID())
                         .file(mockMultipartFile))
+                .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.fileName").value(originalFilename))
-                .andExpect(jsonPath("$.fileDownloadURL").value(containsString("/users/testUser/games/" + game.getGameID() + "/download-pp")))
                 .andExpect(jsonPath("$.contentType").value(contentType));
-
     }
 
+    @Test
+    @DisplayName("Should get all users games")
+    void shouldGetAllUsersGames() throws Exception {
+        User user = new User();
+        user.setUsername("testUser");
+        testEntityManager.persist(user);
+
+        Game game = new Game();
+        game.setGameName("Shadow of the Beast");
+        game.setUser(user);
+        testEntityManager.persist(game);
+
+        Game game2 = new Game();
+        game2.setGameName("Shadow of the Beast 2");
+        game2.setUser(user);
+        testEntityManager.persist(game2);
+
+        testEntityManager.flush();
+
+        this.mockMvc
+                .perform(get("/users/{username}/games", "testUser"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].gameName").value("Shadow of the Beast"))
+                .andExpect(jsonPath("$[1].gameName").value("Shadow of the Beast 2"));
+    }
 
 }

@@ -10,6 +10,7 @@ import com.example.rgjalpha1.service.GameService;
 import com.example.rgjalpha1.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,14 +72,17 @@ public class GameController {
 
     // PostMapping to upload a game photo to a game
     @PostMapping("/users/{username}/games/{gameID}/upload-game-photo")
-    public PhotoUploadResponse uploadGamePhoto(
+    public ResponseEntity<PhotoUploadResponse> uploadGamePhoto(
             @PathVariable("username") String username,
             @PathVariable("gameID") Long gameID,
             @RequestParam("file") MultipartFile file) throws IOException {
 
             String downloadUrl = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
-                    .path("users/"+ username +"/games/")
+//                    .path("users/" + username + "/games/")
+                    .path("/users/")
+                    .path(username)
+                    .path("/games/")
                     .path(gameID.toString())
                     .path("/download-game-photo/")
                     .path(Objects.requireNonNull(file.getOriginalFilename()))
@@ -93,17 +97,18 @@ public class GameController {
             photoUploadResponse.setFileDownloadUrl(downloadUrl);
             photoUploadResponse.setContentType(contentType);
 
-            return photoUploadResponse;
+            return ResponseEntity.ok(photoUploadResponse);
     }
 
     // GetMapping to download a game photo
-    @GetMapping("/users/{username}/games/{gameID}/download-game-photo/{fileName:.+}")
+    @GetMapping("/users/{username}/games/{gameID}/download-game-photo/{fileName}")
     public ResponseEntity<byte[]> downloadGamePhoto(
             @PathVariable("username") String username,
             @PathVariable("gameID") Long gameID,
             @PathVariable("fileName") String fileName) {
-        byte[] image = gameService.downloadGamePhoto(gameID, username, fileName);
-        return ResponseEntity.ok().body(image);
+        byte[] photoData = gameService.downloadGamePhoto(gameID, username, fileName);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + fileName + "\"").body(photoData);
     }
 
 
