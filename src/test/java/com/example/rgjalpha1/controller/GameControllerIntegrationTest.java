@@ -1,10 +1,14 @@
 package com.example.rgjalpha1.controller;
 
+import com.example.rgjalpha1.model.Game;
+import com.example.rgjalpha1.model.GameCondition;
 import com.example.rgjalpha1.model.User;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -14,6 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,7 +35,13 @@ class GameControllerIntegrationTest {
     @Autowired
     EntityManager testEntityManager;
 
+    @BeforeEach
+    void clearDb() {
+        testEntityManager.clear();
+    }
+
     @Test
+    @DisplayName("Should add game and game condition and assign to user")
     void shouldAddGameAndGameConditionAndAssignToUser() throws Exception {
 
         User user = new User();
@@ -64,4 +75,51 @@ class GameControllerIntegrationTest {
                 .andExpect(content().string(containsString("Sonic 666 added successfully to user " + user.getUsername())));
 
     }
+
+    @Test
+    @DisplayName("Should get all games and game conditions")
+    void shouldGetAllGamesAndGameConditions() throws Exception {
+        Game game = new Game();
+        game.setGameName("Sonic 666");
+        game.setGameYearOfRelease(1993);
+        game.setGamePublisher("Sega");
+        game.setGameIsOriginal(true);
+        game.setSystemName("MegaDrive");
+        testEntityManager.persist(game);
+
+        Game game2 = new Game();
+        game2.setGameName("Mario 777");
+        game2.setGameYearOfRelease(1994);
+        game2.setGamePublisher("Nintendo");
+        game2.setGameIsOriginal(true);
+        game2.setSystemName("SNES");
+        testEntityManager.persist(game2);
+
+        GameCondition gameCondition = new GameCondition();
+        gameCondition.setHasManual(true);
+        gameCondition.setHasCase(true);
+        gameCondition.setHasScratches(false);
+        gameCondition.setHasStickers(false);
+        gameCondition.setHasWriting(false);
+        testEntityManager.persist(gameCondition);
+
+        GameCondition gameCondition2 = new GameCondition();
+        gameCondition2.setHasManual(true);
+        gameCondition2.setHasCase(true);
+        gameCondition2.setHasScratches(false);
+        gameCondition2.setHasStickers(false);
+        gameCondition2.setHasWriting(false);
+        testEntityManager.persist(gameCondition2);
+
+        testEntityManager.flush();
+
+        this.mockMvc
+                .perform(get("/admin/games"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk());
+
+
+    }
+
+
 }
