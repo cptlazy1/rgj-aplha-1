@@ -1,4 +1,5 @@
 -- Users
+-- ToDo: remove all users except admin
 INSERT INTO users (is_enabled, email, password, role, username)
 VALUES (true, 'lazy@strong.com', '$2a$12$IzA1Ja1LH4PSMoro9PeITO1etDlknPjSX1nLusgt1vi9c1uaEXdEK', 'USER', 'cptlazy99');
 

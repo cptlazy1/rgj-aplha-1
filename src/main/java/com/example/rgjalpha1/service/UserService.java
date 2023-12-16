@@ -174,13 +174,5 @@ public class UserService {
         return userDto;
     }
 
-//    // Method to convert UserDto to User with ModelMapper
-//    // Todo: Remove this method if not needed
-//    private User convertToUser(UserDto userDto) {
-//        ModelMapper modelMapper = new ModelMapper();
-//        User user = modelMapper.map(userDto, User.class);
-//        return user;
-//    }
-
 
 }

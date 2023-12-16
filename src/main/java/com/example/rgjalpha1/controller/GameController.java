@@ -133,9 +133,6 @@ public class GameController {
 
 
     // DeleteMapping to delete game by gameID
-    // Todo: Delete game condition when deleting game
-    // Todo: Delete game photo when deleting game
-    // Todo: Delete game from user when deleting game
     @DeleteMapping("users/{username}/games/{id}")
     public ResponseEntity<Void> deleteGame(
             @PathVariable("username") String username,
