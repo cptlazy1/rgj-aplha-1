@@ -72,7 +72,10 @@ class GameControllerIntegrationTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isCreated())
                 .andExpect(content()
-                        .string(containsString("Sonic 666 added successfully to user " + user.getUsername())));
+                        // addGame returns the gameID of the game that was added which is a Long value of 1
+                        .string(containsString("1")));
+
+
 
     }
 
