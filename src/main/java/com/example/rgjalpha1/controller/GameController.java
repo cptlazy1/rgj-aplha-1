@@ -51,7 +51,7 @@ public class GameController {
 
     // PostMapping to add a game AND assign it to a user AND assign a game condition to the game
     @PostMapping("/users/{username}/games")
-    public ResponseEntity<String> addGame(
+    public ResponseEntity<Long> addGame(
             @PathVariable("username") String username,
             @Valid @RequestBody GameAndConditionDto gameAndConditionDto) {
         GameDto gameDto = gameService.addGame(gameAndConditionDto.getGameDto());
@@ -67,7 +67,7 @@ public class GameController {
         userService.assignGameToUser(username, gameDto.getGameID());
         gameConditionService.assignGameCondition(gameConditionDto.getGameConditionID(), gameDto.getGameID());
 
-        return ResponseEntity.created(uri).body(gameDto.getGameName() + " added successfully to user " + username);
+        return ResponseEntity.created(uri).body(gameDto.getGameID());
     }
 
 

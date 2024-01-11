@@ -56,7 +56,7 @@ public class GameSystemController {
 
     // PostMapping to add game system AND assign it to a user AND assign a game system condition to the game system
     @PostMapping("/users/{username}/game-systems")
-    public ResponseEntity<String> addGameSystem(
+    public ResponseEntity<Long> addGameSystem(
             @PathVariable("username") String username,
             @Valid @RequestBody GameSystemAndConditionDto gameSystemAndConditionDto) {
         GameSystemDto gameSystemDto =
@@ -75,7 +75,11 @@ public class GameSystemController {
                 .getGameSystemConditionID(), gameSystemDto.getGameSystemID());
 
         return ResponseEntity.created(uri)
-                .body(gameSystemDto.getGameSystemName() + " added successfully to user " + username);
+//                .body(gameSystemDto.getGameSystemName() + " added successfully to user " + username);
+//                .body("ID:" + gameSystemDto.getGameSystemID() + " added successfully to user " + username);
+
+                // Return the game system ID instead of the game system name
+                .body(gameSystemDto.getGameSystemID());
     }
 
 
