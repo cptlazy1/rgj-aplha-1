@@ -29,14 +29,16 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/authentication/**").permitAll()
-                                // All users can access this end-point
-                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                                // Only admin can access this end-point
-                                .requestMatchers("/users/{username}/**").access(new UserAuthorizationManager())
-                                // Only the user with the same username can access this end-point
+                                .anyRequest().permitAll()
 
-                                .anyRequest().denyAll()
+                        // TODO: Uncomment the following lines to enable authentication
+//                                .requestMatchers("/authentication/**").permitAll()
+//                                // All users can access this end-point
+//                                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+//                                // Only admin can access this end-point
+//                                .requestMatchers("/users/{username}/**").access(new UserAuthorizationManager())
+//                                // Only the user with the same username can access this end-point
+//                                .anyRequest().denyAll()
 
                 )
                 .sessionManagement(session -> session
