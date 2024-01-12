@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
@@ -25,8 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(GameController.class)
-@ActiveProfiles("test")
+//@WebMvcTest(GameController.class)
+//@ActiveProfiles("test")
+@SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 class GameControllerUnitTest {
 
@@ -87,11 +89,12 @@ class GameControllerUnitTest {
         when(gameService.addGame(any(GameDto.class))).thenReturn(gameDto);
         when(gameConditionService.addGameCondition(any(GameConditionDto.class))).thenReturn(gameConditionDto);
 
+
         mockMvc.perform(post("/users/{username}/games", username)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("")));
+                .andExpect(content().string(""));
 
     }
 
