@@ -1,9 +1,12 @@
 package com.example.rgjalpha1.service;
 
+import com.example.rgjalpha1.dto.GameSystemAndConditionDto;
+import com.example.rgjalpha1.dto.GameSystemConditionDto;
 import com.example.rgjalpha1.dto.GameSystemDto;
 import com.example.rgjalpha1.exception.BadRequestException;
 import com.example.rgjalpha1.exception.RecordNotFoundException;
 import com.example.rgjalpha1.model.GameSystem;
+import com.example.rgjalpha1.model.GameSystemCondition;
 import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.GameSystemRepository;
 import com.example.rgjalpha1.repository.UserRepository;
@@ -60,6 +63,28 @@ public class GameSystemService {
         }
         return gameSystemDtos;
     }
+
+
+    // Method to get game system, and it's condition by gameSystemID and username
+    public GameSystemAndConditionDto getGameSystemByIdAndUserName(String username, Long gameSystemID) {
+        Optional<GameSystem> gameSystemOptional = gameSystemRepository.findById(gameSystemID);
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (gameSystemOptional.isPresent() && userOptional.isPresent()) {
+            GameSystem gameSystem = gameSystemOptional.get();
+            GameSystemDto gameSystemDto = convertToGameSystemDto(gameSystem);
+
+            // Fetch the GameSystemCondition associated with the GameSystem
+            GameSystemCondition gameSystemCondition = gameSystem.getGameSystemCondition();
+            // Convert GameSystemCondition to GameSystemConditionDto
+            GameSystemConditionDto gameSystemConditionDto = convertToGameSystemConditionDto(gameSystemCondition);
+
+            // Return both GameSystemDto and GameSystemConditionDto
+            return new GameSystemAndConditionDto(gameSystemDto, gameSystemConditionDto);
+        } else {
+            throw new RecordNotFoundException("No game system record exists for given gameSystemID");
+        }
+    }
+
 
     // Method to update game system by gameSystemID
     public GameSystemDto updateGameSystem(Long gameSystemID, GameSystemDto gameSystemDto) {
@@ -137,6 +162,13 @@ public class GameSystemService {
         ModelMapper modelMapper = new ModelMapper();
         GameSystemDto gameSystemDto = modelMapper.map(gameSystem, GameSystemDto.class);
         return gameSystemDto;
+    }
+
+    // Method to convert GameSystemConditionDto to GameSystemCondition with ModelMapper
+    public GameSystemConditionDto convertToGameSystemConditionDto(GameSystemCondition gameSystemCondition) {
+        ModelMapper modelMapper = new ModelMapper();
+        GameSystemConditionDto gameSystemConditionDto = modelMapper.map(gameSystemCondition, GameSystemConditionDto.class);
+        return gameSystemConditionDto;
     }
 
 }
