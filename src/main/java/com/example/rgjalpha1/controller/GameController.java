@@ -4,6 +4,11 @@ import com.example.rgjalpha1.dto.GameAndConditionDto;
 import com.example.rgjalpha1.dto.GameConditionDto;
 import com.example.rgjalpha1.dto.GameDto;
 import com.example.rgjalpha1.dto.PhotoUploadResponse;
+import com.example.rgjalpha1.exception.UsernameNotFoundException;
+import com.example.rgjalpha1.model.Game;
+import com.example.rgjalpha1.model.User;
+import com.example.rgjalpha1.repository.GameRepository;
+import com.example.rgjalpha1.repository.UserRepository;
 import com.example.rgjalpha1.service.GameConditionService;
 import com.example.rgjalpha1.service.GameService;
 import com.example.rgjalpha1.service.UserService;
@@ -20,6 +25,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +34,8 @@ public class GameController {
     private final GameService gameService;
     private final UserService userService;
     private final GameConditionService gameConditionService;
+    private final UserRepository userRepository;
+    private final GameRepository gameRepository;
 
 
     // GetMapping to get all games and game conditions
@@ -78,40 +86,56 @@ public class GameController {
             @PathVariable("gameID") Long gameID,
             @RequestParam("file") MultipartFile file) throws IOException {
 
-            String downloadUrl = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-//                    .path("users/" + username + "/games/")
-                    .path("/users/")
-                    .path(username)
-                    .path("/games/")
-                    .path(gameID.toString())
-                    .path("/download-game-photo/")
-                    .path(Objects.requireNonNull(file.getOriginalFilename()))
-                    .toUriString();
+        String downloadUrl = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/users/")
+                .path(username)
+                .path("/games/")
+                .path(gameID.toString())
+                .path("/download-game-photo/")
+                .path(Objects.requireNonNull(file.getOriginalFilename()))
+                .toUriString();
 
-            String contentType = file.getContentType();
+        String contentType = file.getContentType();
 
-            gameService.uploadGamePhoto(file, gameID, username);
+        gameService.uploadGamePhoto(file, gameID, username);
 
-            PhotoUploadResponse photoUploadResponse = new PhotoUploadResponse();
-            photoUploadResponse.setFileName(file.getOriginalFilename());
-            photoUploadResponse.setFileDownloadUrl(downloadUrl);
-            photoUploadResponse.setContentType(contentType);
+        PhotoUploadResponse photoUploadResponse = new PhotoUploadResponse();
+        photoUploadResponse.setFileName(file.getOriginalFilename());
+        photoUploadResponse.setFileDownloadUrl(downloadUrl);
+        photoUploadResponse.setContentType(contentType);
 
-            return ResponseEntity.ok(photoUploadResponse);
+        return ResponseEntity.ok(photoUploadResponse);
     }
+
 
     // GetMapping to download a game photo
     @GetMapping("/users/{username}/games/{gameID}/download-game-photo/{fileName}")
     public ResponseEntity<byte[]> downloadGamePhoto(
             @PathVariable("username") String username,
             @PathVariable("gameID") Long gameID,
-            @PathVariable("fileName") String fileName) {
-        byte[] photoData = gameService.downloadGamePhoto(gameID, username, fileName);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + fileName + "\"").body(photoData);
-    }
+            @PathVariable("fileName") String fileName) throws Exception {
 
+        Optional<User> user = userRepository.findByUsername(username);
+        Optional<Game> game = gameRepository.findById(gameID);
+
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("No user record exists for given username");
+        } else if (game.isEmpty()) {
+            throw new Exception("No game record exists for given gameID");
+        } else {
+            Game game1 = game.get();
+            if (!game1.getGamePhotoFileName().equals(fileName)) {
+                throw new Exception("File not found for the given game");
+            }
+
+            byte[] photoData = game1.getGamePhotoData();
+
+            return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment; fileName=" + game1.getGamePhotoFileName()).body(photoData);
+
+        }
+    }
 
     // GetMapping to get all of a users games
     @GetMapping("/users/{username}/games")
@@ -126,7 +150,7 @@ public class GameController {
     public ResponseEntity<GameAndConditionDto> getGameAndCondition(
             @PathVariable("username") String username,
             @PathVariable("id") Long gameID) {
-            GameAndConditionDto gameAndConditionDto = gameService.getGameByIdAndUserName(username, gameID);
+        GameAndConditionDto gameAndConditionDto = gameService.getGameByIdAndUserName(username, gameID);
         return ResponseEntity.ok().body(gameAndConditionDto);
     }
 

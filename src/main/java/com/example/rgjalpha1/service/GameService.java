@@ -153,24 +153,24 @@ public class GameService {
 
     }
 
-    // Method to download a game photo
-    public byte[] downloadGamePhoto(Long gameID, String username, String fileName) {
-        Optional<Game> game = gameRepository.findById(gameID);
-        Optional<User> user = userRepository.findByUsername(username);
-
-        try {
-            if (game.isEmpty()) {
-                throw new RecordNotFoundException("No game record exists for given gameID");
-            } else if (user.isEmpty()) {
-                throw new UsernameNotFoundException("No user record exists for given username");
-            } else {
-                Game game1 = game.get();
-                return game1.getGamePhotoData();
-            }
-        } catch (Exception e) {
-            throw new RecordNotFoundException("Issue in downloading the file: ");
-        }
-    }
+//    // Method to download a game photo
+//    public byte[] downloadGamePhoto(Long gameID, String username) {
+//        Optional<Game> game = gameRepository.findById(gameID);
+//        Optional<User> user = userRepository.findByUsername(username);
+//
+//        try {
+//            if (game.isEmpty()) {
+//                throw new RecordNotFoundException("No game record exists for given gameID");
+//            } else if (user.isEmpty()) {
+//                throw new UsernameNotFoundException("No user record exists for given username");
+//            } else {
+//                Game game1 = game.get();
+//                return game1.getGamePhotoData();
+//            }
+//        } catch (Exception e) {
+//            throw new RecordNotFoundException("Issue in downloading the file: ");
+//        }
+//    }
 
 
     // Method to convert GameDto to Game with ModelMapper

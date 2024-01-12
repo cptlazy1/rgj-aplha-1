@@ -1,12 +1,19 @@
 package com.example.rgjalpha1.controller;
 
 import com.example.rgjalpha1.dto.*;
+import com.example.rgjalpha1.exception.RecordNotFoundException;
+import com.example.rgjalpha1.exception.UsernameNotFoundException;
+import com.example.rgjalpha1.model.GameSystem;
+import com.example.rgjalpha1.model.User;
+import com.example.rgjalpha1.repository.GameSystemRepository;
+import com.example.rgjalpha1.repository.UserRepository;
 import com.example.rgjalpha1.service.GameConditionService;
 import com.example.rgjalpha1.service.GameSystemConditionService;
 import com.example.rgjalpha1.service.GameSystemService;
 import com.example.rgjalpha1.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +24,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +33,9 @@ public class GameSystemController {
     private final GameSystemService gameSystemService;
     private final UserService userService;
     private final GameSystemConditionService gameSystemConditionService;
+    private final UserRepository userRepository;
+    private final GameSystemRepository gameSystemRepository;
+
 
 
     // GetMapping to get all game systems and their conditions
@@ -112,16 +123,18 @@ public class GameSystemController {
 
     // PostMapping to upload a game system photo to a game system
     @PostMapping("/users/{username}/game-systems/{gameSystemID}/upload-game-system-photo")
-    public PhotoUploadResponse uploadGameSystemPhoto(
+    public ResponseEntity<PhotoUploadResponse> uploadGameSystemPhoto(
             @PathVariable("username") String username,
             @PathVariable("gameSystemID") Long gameSystemID,
             @RequestParam("file") MultipartFile file) throws IOException {
 
             String downloadUrl = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
-                    .path("users/{username}/game-systems/")
+                    .path("users/")
+                    .path(username)
+                    .path("/game-systems/")
                     .path(gameSystemID.toString())
-                    .path("/download-game-system-photo")
+                    .path("/download-game-system-photo/")
                     .path(Objects.requireNonNull(file.getOriginalFilename()))
                     .toUriString();
 
@@ -134,7 +147,35 @@ public class GameSystemController {
             photoUploadResponse.setFileDownloadUrl(downloadUrl);
             photoUploadResponse.setContentType(contentType);
 
-            return photoUploadResponse;
+            return ResponseEntity.ok(photoUploadResponse);
+    }
+
+    // GetMapping to download a game system photo
+    @GetMapping("/users/{username}/game-systems/{gameSystemID}/download-game-system-photo/{fileName}")
+    public ResponseEntity<byte[]> downloadGameSystemPhoto(
+            @PathVariable("username") String username,
+            @PathVariable("gameSystemID") Long gameSystemID,
+            @PathVariable("fileName") String fileName) throws Exception {
+
+        Optional<User> user = userRepository.findByUsername(username);
+        Optional<GameSystem> gameSystem = gameSystemRepository.findById(gameSystemID);
+
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("No user record exists for given username");
+        } else if (gameSystem.isEmpty()) {
+            throw new RecordNotFoundException("No game system record exists for given gameSystemID");
+        } else {
+            GameSystem gameSystem1 = gameSystem.get();
+            if (!gameSystem1.getGameSystemPhotoFileName().equals(fileName)) {
+                throw new Exception("File not found for the given game system");
+            }
+
+            byte[] photoData = gameSystem1.getGameSystemPhotoData();
+
+            return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment; fileName=" + gameSystem1.getGameSystemPhotoFileName()).body(photoData);
+
+        }
     }
 
 }
