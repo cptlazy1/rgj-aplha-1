@@ -121,6 +121,15 @@ public class GameController {
         return ResponseEntity.ok().body(gameDtos);
     }
 
+    // GetMapping to get a game, and it's condition by gameID and username
+    @GetMapping("/users/{username}/games/{id}")
+    public ResponseEntity<GameAndConditionDto> getGameAndCondition(
+            @PathVariable("username") String username,
+            @PathVariable("id") Long gameID) {
+            GameAndConditionDto gameAndConditionDto = gameService.getGameByIdAndUserName(username, gameID);
+        return ResponseEntity.ok().body(gameAndConditionDto);
+    }
+
 
     // PutMapping to update game by username and gameID
     @PutMapping("users/{username}/games/{id}")

@@ -1,10 +1,13 @@
 package com.example.rgjalpha1.service;
 
+import com.example.rgjalpha1.dto.GameAndConditionDto;
+import com.example.rgjalpha1.dto.GameConditionDto;
 import com.example.rgjalpha1.dto.GameDto;
 import com.example.rgjalpha1.exception.BadRequestException;
 import com.example.rgjalpha1.exception.RecordNotFoundException;
 import com.example.rgjalpha1.model.Game;
 
+import com.example.rgjalpha1.model.GameCondition;
 import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.GameRepository;
 import com.example.rgjalpha1.repository.UserRepository;
@@ -60,6 +63,23 @@ public class GameService {
             gameDtos.add(gameDto);
         }
         return gameDtos;
+    }
+
+    // Method to get a game, and it's condition by username and gameID
+    public GameAndConditionDto getGameByIdAndUserName(String username, Long gameID) {
+        Optional<Game> gameOptional = gameRepository.findById(gameID);
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (gameOptional.isPresent() && userOptional.isPresent()) {
+            Game game = gameOptional.get();
+            GameDto gameDto = convertToGameDto(game);
+
+            GameCondition gameCondition = game.getGameCondition();
+            GameConditionDto gameConditionDto = convertToGameConditionDto(gameCondition);
+
+            return new GameAndConditionDto(gameDto, gameConditionDto);
+        } else {
+            throw new RecordNotFoundException("No game record exists for given gameID");
+        }
     }
 
 
@@ -167,6 +187,14 @@ public class GameService {
         ModelMapper modelMapper = new ModelMapper();
 
         return modelMapper.map(game, GameDto.class);
+    }
+
+    // Method to convert GameCondition to GameConditionDto with ModelMapper
+    public GameConditionDto convertToGameConditionDto(GameCondition gameCondition) {
+
+        ModelMapper modelMapper = new ModelMapper();
+        GameConditionDto gameConditionDto = modelMapper.map(gameCondition, GameConditionDto.class);
+        return gameConditionDto;
     }
 
 }
