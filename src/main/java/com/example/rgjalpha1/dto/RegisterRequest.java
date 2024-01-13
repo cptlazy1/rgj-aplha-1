@@ -2,7 +2,8 @@ package com.example.rgjalpha1.dto;
 
 
 import com.example.rgjalpha1.validation.UniqueUsername;
-import jakarta.validation.constraints.Email;
+import com.example.rgjalpha1.validation.ValidEmail;
+
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,10 @@ public class RegisterRequest {
     @Size(min = 8, max = 16, message = "Password must be between 8 and 16 characters")
     private String password;
 
-    @Email(message = "Please enter a valid email address")
+//    @Email(message = "Please enter a valid email address")
+    @ValidEmail
     private String email;
+
+    private Boolean isEnabled = true;
 
 }

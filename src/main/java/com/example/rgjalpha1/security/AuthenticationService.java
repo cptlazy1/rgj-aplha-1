@@ -4,6 +4,7 @@ import com.example.rgjalpha1.dto.AuthenticationRequest;
 import com.example.rgjalpha1.dto.AuthenticationResponse;
 import com.example.rgjalpha1.dto.RegisterRequest;
 import com.example.rgjalpha1.exception.BadRequestException;
+import com.example.rgjalpha1.exception.UsernameExistsException;
 import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.UserRepository;
 import com.example.rgjalpha1.role.Role;
@@ -48,7 +49,7 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest registerRequest) {
 
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new BadRequestException("Username already exists. Please choose another one.");
+            throw new UsernameExistsException("Username already exists. Please choose another one.");
         } else {
 
             var user = User
@@ -56,12 +57,15 @@ public class AuthenticationService {
                     .username(registerRequest.getUsername())
                     .password(passwordEncoder.encode(registerRequest.getPassword()))
                     .email(registerRequest.getEmail())
+                    .isEnabled(true)
                     .role(Role.USER)
                     .build();
 
             userRepository.save(user);
 
-            return AuthenticationResponse.builder().build();
+            var jwToken = jwtService.generateToken(user);
+
+            return AuthenticationResponse.builder().jwToken(jwToken).build();
         }
     }
 
