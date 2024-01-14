@@ -21,37 +21,14 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final JwtService jwtService;
-
     private final AuthenticationManager authenticationManager;
 
-//     Register method with JWT. User gets a token after registration and does not need to log in again.
-//    public AuthenticationResponse register(RegisterRequest registerRequest) {
-//        var user = User
-//                .builder()
-//                .username(registerRequest.getUsername())
-//                .password(passwordEncoder.encode(registerRequest.getPassword()))
-//                .email(registerRequest.getEmail())
-//                .role(Role.USER)
-//                .build();
-//        userRepository.save(user);
-//
-//        var jwToken = jwtService.generateToken(user);
-//        return AuthenticationResponse.builder()
-//                .jwToken(jwToken)
-//                .build();
-//    }
-
-
     public AuthenticationResponse register(RegisterRequest registerRequest) {
-
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new UsernameExistsException("Username already exists. Please choose another one.");
+            throw new UsernameExistsException("Username " + registerRequest.getUsername() + " already exists. Please choose another one.");
         } else {
-
             var user = User
                     .builder()
                     .username(registerRequest.getUsername())
@@ -60,12 +37,12 @@ public class AuthenticationService {
                     .isEnabled(true)
                     .role(Role.USER)
                     .build();
-
             userRepository.save(user);
-
             var jwToken = jwtService.generateToken(user);
-
-            return AuthenticationResponse.builder().jwToken(jwToken).build();
+            return AuthenticationResponse.builder()
+                    .jwToken(jwToken)
+                    .message("Account for user: " + registerRequest.getUsername() + " is created!")
+                    .build();
         }
     }
 
@@ -82,6 +59,7 @@ public class AuthenticationService {
         var jwToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .jwToken(jwToken)
+                .message("User: " + authenticationRequest.getUsername() + " is logged in!")
                 .build();
     }
 }

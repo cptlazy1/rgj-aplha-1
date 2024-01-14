@@ -20,11 +20,10 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(
+    public ResponseEntity<AuthenticationResponse> register(
            @Valid @RequestBody RegisterRequest registerRequest
     ) {
-        authenticationService.register(registerRequest);
-        return ResponseEntity.ok("Account for user: " + registerRequest.getUsername() + " is created!");
+        return ResponseEntity.ok(authenticationService.register(registerRequest));
     }
 
     @PostMapping("/login")
