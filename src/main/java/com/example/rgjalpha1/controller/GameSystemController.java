@@ -109,7 +109,7 @@ public class GameSystemController {
         return ResponseEntity.ok().body(gameSystemDto);
     }
 
-    // DeleteMapping to delete game system
+    // DeleteMapping to delete a game system
     @DeleteMapping("users/{username}/game-systems/{id}")
     public ResponseEntity<Void> deleteGameSystem(
             @PathVariable("username") String username,

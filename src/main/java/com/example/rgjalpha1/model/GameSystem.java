@@ -29,8 +29,8 @@ public class GameSystem {
     private byte[] gameSystemPhotoData;
     private String gameSystemPhotoFileName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_name")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_name", nullable = false)
     private User user;
 
     @OneToOne(

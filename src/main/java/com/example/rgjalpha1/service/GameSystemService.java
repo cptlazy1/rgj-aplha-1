@@ -65,7 +65,7 @@ public class GameSystemService {
     }
 
 
-    // Method to get game system, and it's condition by gameSystemID and username
+    // Method to get a game system, and it's condition by gameSystemID and username
     public GameSystemAndConditionDto getGameSystemByIdAndUserName(String username, Long gameSystemID) {
         Optional<GameSystem> gameSystemOptional = gameSystemRepository.findById(gameSystemID);
         Optional<User> userOptional = userRepository.findByUsername(username);
@@ -86,7 +86,7 @@ public class GameSystemService {
     }
 
 
-    // Method to update game system by gameSystemID
+    // Method to update a game system by gameSystemID
     public GameSystemDto updateGameSystem(Long gameSystemID, GameSystemDto gameSystemDto) {
 
         Optional<GameSystem> gameSystemOptional = gameSystemRepository.findById(gameSystemID);
@@ -120,9 +120,14 @@ public class GameSystemService {
         Optional<GameSystem> gameSystemOptional = gameSystemRepository.findById(gameSystemID);
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (gameSystemOptional.isPresent() && userOptional.isPresent()) {
+
+            GameSystem gameSystem = gameSystemOptional.get();
+            User user = userOptional.get();
+            user.getGameSystems().remove(gameSystem);
+
             gameSystemRepository.deleteById(gameSystemID);
         } else {
-            throw new RecordNotFoundException("No game system record exists for given gameSystemID");
+            throw new RecordNotFoundException("No game system record exists for given gameSystemID or username");
         }
     }
 

@@ -121,10 +121,16 @@ public class GameService {
     // Todo: This method is not deleting the game if it has a user associated with it. Fix this.
     public void deleteGame(Long gameID) {
         Optional<Game> gameOptional = gameRepository.findById(gameID);
-        if (gameOptional.isPresent()) {
+        Optional<User> userOptional = userRepository.findByUsername("test");
+        if (gameOptional.isPresent() && userOptional.isPresent()) {
+
+            Game game = gameOptional.get();
+            User user = game.getUser();
+            user.getGames().remove(game);
+
             gameRepository.deleteById(gameID);
         } else {
-            throw new RecordNotFoundException("No game record exists for given gameID");
+            throw new RecordNotFoundException("No game record exists for given gameID or username");
         }
     }
 

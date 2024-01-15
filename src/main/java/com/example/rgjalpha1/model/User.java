@@ -37,14 +37,16 @@ public class User implements UserDetails {
     @OneToMany(
             mappedBy = "user",
             fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JsonIgnore
     private List<Game> games = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "user",
             fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JsonIgnore
     private List<GameSystem> gameSystems = new ArrayList<>();
 
