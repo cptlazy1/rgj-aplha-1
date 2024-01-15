@@ -109,34 +109,6 @@ public class GameController {
     }
 
 
-//    // GetMapping to download a game photo
-//    @GetMapping("/users/{username}/games/{gameID}/download-game-photo/{fileName}")
-//    public ResponseEntity<byte[]> downloadGamePhoto(
-//            @PathVariable("username") String username,
-//            @PathVariable("gameID") Long gameID,
-//            @PathVariable("fileName") String fileName) throws Exception {
-//
-//        Optional<User> user = userRepository.findByUsername(username);
-//        Optional<Game> game = gameRepository.findById(gameID);
-//
-//        if (user.isEmpty()) {
-//            throw new UsernameNotFoundException("No user record exists for given username");
-//        } else if (game.isEmpty()) {
-//            throw new Exception("No game record exists for given gameID");
-//        } else {
-//            Game game1 = game.get();
-//            if (!game1.getGamePhotoFileName().equals(fileName)) {
-//                throw new Exception("File not found for the given game");
-//            }
-//
-//            byte[] photoData = game1.getGamePhotoData();
-//
-//            return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-//                    "attachment; fileName=" + game1.getGamePhotoFileName()).body(photoData);
-//
-//        }
-//    }
-
     // GetMapping to download a game photo
     @GetMapping("/users/{username}/games/{gameID}/download-game-photo")
     public ResponseEntity<byte[]> downloadGamePhoto(

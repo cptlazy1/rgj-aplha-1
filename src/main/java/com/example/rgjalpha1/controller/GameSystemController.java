@@ -36,8 +36,6 @@ public class GameSystemController {
     private final UserRepository userRepository;
     private final GameSystemRepository gameSystemRepository;
 
-
-
     // GetMapping to get all game systems and their conditions
     @GetMapping("/game-systems")
     public ResponseEntity<List<GameSystemAndConditionDto>> getAllGameSystemsAndGameSystemConditions() {
@@ -150,33 +148,6 @@ public class GameSystemController {
             return ResponseEntity.ok(photoUploadResponse);
     }
 
-//    // GetMapping to download a game system photo
-//    @GetMapping("/users/{username}/game-systems/{gameSystemID}/download-game-system-photo/{fileName}")
-//    public ResponseEntity<byte[]> downloadGameSystemPhoto(
-//            @PathVariable("username") String username,
-//            @PathVariable("gameSystemID") Long gameSystemID,
-//            @PathVariable("fileName") String fileName) throws Exception {
-//
-//        Optional<User> user = userRepository.findByUsername(username);
-//        Optional<GameSystem> gameSystem = gameSystemRepository.findById(gameSystemID);
-//
-//        if (user.isEmpty()) {
-//            throw new UsernameNotFoundException("No user record exists for given username");
-//        } else if (gameSystem.isEmpty()) {
-//            throw new RecordNotFoundException("No game system record exists for given gameSystemID");
-//        } else {
-//            GameSystem gameSystem1 = gameSystem.get();
-//            if (!gameSystem1.getGameSystemPhotoFileName().equals(fileName)) {
-//                throw new Exception("File not found for the given game system");
-//            }
-//
-//            byte[] photoData = gameSystem1.getGameSystemPhotoData();
-//
-//            return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-//                    "attachment; fileName=" + gameSystem1.getGameSystemPhotoFileName()).body(photoData);
-//
-//        }
-//    }
 
     @GetMapping("/users/{username}/game-systems/{gameSystemID}/download-game-system-photo")
     public ResponseEntity<byte[]> downloadGameSystemPhoto(
