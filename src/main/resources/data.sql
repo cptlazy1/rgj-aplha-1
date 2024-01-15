@@ -21,7 +21,7 @@ VALUES (false, true, true, false, false);
 
 -- Games
 INSERT INTO games (game_name, game_year_of_release, game_publisher, game_is_original, system_name, user_name, game_condition_id)
-VALUES ('Sonic', 1991, 'Sega', true, 'MegaDrive', 'porgy123', 1);
+VALUES ('Sonic', 1991, 'Sega', true, 'MegaDrive', 'cptlazy99', 1);
 
 INSERT INTO games (game_name, game_year_of_release, game_publisher, game_is_original, system_name, user_name, game_condition_id)
 VALUES ('Samurai ShoDown 2', 1994, 'SNK', true, 'Neo-Geo', 'porgy123', 2);
@@ -41,7 +41,7 @@ VALUES (true, true, true);
 
 --  Game systems
 INSERT INTO game_systems (game_system_name, game_system_brand, game_system_year_of_release, is_ready_to_play, user_name, game_system_condition_id)
-VALUES ('Dreamcast', 'SEGA', 1999, true, 'porgy123', 1);
+VALUES ('Dreamcast', 'SEGA', 1999, true, 'cptlazy99', 1);
 
 INSERT INTO game_systems (game_system_name, game_system_brand, game_system_year_of_release, is_ready_to_play, user_name, game_system_condition_id)
 VALUES ('Neo-Geo', 'SNK', 1990, true, 'porgy123', 2);
