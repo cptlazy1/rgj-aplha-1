@@ -127,7 +127,7 @@ public class GameSystemService {
 
             gameSystemRepository.deleteById(gameSystemID);
         } else {
-            throw new RecordNotFoundException("No game system record exists for given gameSystemID or username");
+            throw new RecordNotFoundException("No record exists for given gameSystemID or username");
         }
     }
 
