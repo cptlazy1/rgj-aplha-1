@@ -165,11 +165,11 @@ public class GameController {
 
     // DeleteMapping to delete game by gameID
     @DeleteMapping("users/{username}/games/{id}")
-    public ResponseEntity<Void> deleteGame(
+    public ResponseEntity<String> deleteGame(
             @PathVariable("username") String username,
             @PathVariable("id") Long gameID) {
-        gameService.deleteGame(gameID);
-        return ResponseEntity.noContent().build();
+        gameService.deleteGame(username, gameID);
+        return ResponseEntity.ok().body("Game deleted successfully from user: " + username);
     }
 
 }

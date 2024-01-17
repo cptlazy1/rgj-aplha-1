@@ -111,11 +111,11 @@ public class GameSystemController {
 
     // DeleteMapping to delete a game system
     @DeleteMapping("users/{username}/game-systems/{id}")
-    public ResponseEntity<Void> deleteGameSystem(
+    public ResponseEntity<String> deleteGameSystem(
             @PathVariable("username") String username,
             @PathVariable("id") Long gameSystemID) {
         gameSystemService.deleteGameSystem(username, gameSystemID);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body("Game system deleted successfully from user: " + username);
     }
 
 
