@@ -29,8 +29,8 @@ public class Game {
     private byte[] gamePhotoData;
     private String gamePhotoFileName;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_name", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_name")
     private User user;
 
     @OneToOne(
