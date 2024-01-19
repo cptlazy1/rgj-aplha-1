@@ -1,5 +1,7 @@
 package com.example.rgjalpha1.controller;
 
+import com.example.rgjalpha1.dto.EmailChangeRequest;
+import com.example.rgjalpha1.dto.PasswordChangeRequest;
 import com.example.rgjalpha1.dto.PhotoUploadResponse;
 import com.example.rgjalpha1.dto.UserDto;
 import com.example.rgjalpha1.exception.UsernameNotFoundException;
@@ -159,22 +161,21 @@ public class UserController {
         return ResponseEntity.ok(username + " has been deleted ");
     }
 
-    // PostMapping to change a user's password
-    @PostMapping("/users/{username}/change-password")
+    // PutMapping to change a user's password
+    @PutMapping("/users/{username}/change-password")
     public ResponseEntity<String> changePassword(
             @PathVariable("username") String username,
-            @RequestParam("oldPassword") String oldPassword,
-            @RequestParam("newPassword") String newPassword) {
-        userService.changeUserPassword(username, oldPassword, newPassword);
+            @RequestBody PasswordChangeRequest passwordChangeRequest) {
+        userService.changeUserPassword(username, passwordChangeRequest.getOldPassword(), passwordChangeRequest.getNewPassword());
         return ResponseEntity.ok(username + "'s password has been changed ");
     }
 
-    // PostMapping to change a user's email
-    @PostMapping("/users/{username}/change-email")
+    // PutMapping to change a user's email
+    @PutMapping("/users/{username}/change-email")
     public ResponseEntity<String> changeEmail(
             @PathVariable("username") String username,
-            @RequestParam("newEmail") String newEmail) {
-        userService.changeUserEmail(username, newEmail);
+            @RequestBody EmailChangeRequest emailChangeRequest) {
+        userService.changeUserEmail(username, emailChangeRequest.getNewEmail());
         return ResponseEntity.ok(username + "'s email has been changed ");
     }
 
