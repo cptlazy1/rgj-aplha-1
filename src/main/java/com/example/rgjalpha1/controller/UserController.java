@@ -99,10 +99,9 @@ public class UserController {
     }
 
     // GetMapping to download a profile photo by username
-    @GetMapping("/users/{username}/download-pp/{fileName}")
+    @GetMapping("/users/{username}/download-pp")
     public ResponseEntity<byte[]> downloadProfilePhoto(
-            @PathVariable String username,
-            @PathVariable String fileName) throws Exception {
+            @PathVariable String username) throws UsernameNotFoundException {
 
         Optional<User> user = userRepository.findByUsername(username);
 
@@ -110,9 +109,6 @@ public class UserController {
             throw new UsernameNotFoundException("No user record exists for given username");
         } else {
             User user1 = user.get();
-            if (!user1.getProfilePhotoFileName().equals(fileName)) {
-                throw new Exception("File not found for the given user");
-            }
 
             byte[] photoData = user1.getProfilePhotoData();
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
@@ -121,10 +117,9 @@ public class UserController {
     }
 
     // GetMapping to download a game room photo by username
-    @GetMapping("/users/{username}/download-grp/{fileName}")
+    @GetMapping("/users/{username}/download-grp")
     public ResponseEntity<byte[]> downloadGameRoomPhoto(
-            @PathVariable String username,
-            @PathVariable String fileName) throws Exception {
+            @PathVariable String username) throws UsernameNotFoundException {
 
         Optional<User> user = userRepository.findByUsername(username);
 
@@ -132,9 +127,6 @@ public class UserController {
             throw new UsernameNotFoundException("No user record exists for given username");
         } else {
             User user1 = user.get();
-            if (!user1.getGameRoomPhotoFileName().equals(fileName)) {
-                throw new Exception("File not found for the given user");
-            }
 
             byte[] photoData = user1.getGameRoomPhotoData();
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
@@ -157,6 +149,33 @@ public class UserController {
             @PathVariable("username") String username) {
         userService.deleteGameRoomPhoto(username);
         return ResponseEntity.ok(username + "'s game room photo has been deleted ");
+    }
+
+    // DeleteMapping to delete a user by username
+    @DeleteMapping("/admin/users/{username}")
+    public ResponseEntity<String> deleteUserByUsername(
+            @PathVariable("username") String username) {
+        userService.deleteUserByUsername(username);
+        return ResponseEntity.ok(username + " has been deleted ");
+    }
+
+    // PostMapping to change a user's password
+    @PostMapping("/users/{username}/change-password")
+    public ResponseEntity<String> changePassword(
+            @PathVariable("username") String username,
+            @RequestParam("oldPassword") String oldPassword,
+            @RequestParam("newPassword") String newPassword) {
+        userService.changeUserPassword(username, oldPassword, newPassword);
+        return ResponseEntity.ok(username + "'s password has been changed ");
+    }
+
+    // PostMapping to change a user's email
+    @PostMapping("/users/{username}/change-email")
+    public ResponseEntity<String> changeEmail(
+            @PathVariable("username") String username,
+            @RequestParam("newEmail") String newEmail) {
+        userService.changeUserEmail(username, newEmail);
+        return ResponseEntity.ok(username + "'s email has been changed ");
     }
 
 }

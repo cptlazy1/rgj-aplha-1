@@ -11,6 +11,7 @@ import com.example.rgjalpha1.repository.GameSystemRepository;
 import com.example.rgjalpha1.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,6 +59,18 @@ public class UserService {
             throw new UsernameNotFoundException("No user record exists for given username");
         }
         return userDto;
+    }
+
+    //Method to delete user by username
+    public void deleteUserByUsername(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            userRepository.delete(user);
+        } else {
+            throw new UsernameNotFoundException("No user record exists for given username");
+        }
     }
 
     // Method to upload a profile photo to a user
@@ -150,7 +163,38 @@ public class UserService {
         }
     }
 
-    // Method to assign game system to user
+    // Method to change a user's password
+    public void changeUserPassword(String username, String oldPassword, String newPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Optional<User> userOptional = userRepository.findByUsername(username);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (passwordEncoder.matches(oldPassword, user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(newPassword));
+                userRepository.save(user);
+            } else {
+                throw new IllegalArgumentException("Old password does not match the current password");
+            }
+        } else {
+            throw new UsernameNotFoundException("No user record exists for given username");
+        }
+    }
+
+    // Method to change a user's email
+    public void changeUserEmail(String username, String newEmail) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setEmail(newEmail);
+            userRepository.save(user);
+        } else {
+            throw new UsernameNotFoundException("No user record exists for given username");
+        }
+    }
+
+    // Method to assign a game system to user
     public void assignGameSystemToUser(String username, Long gameSystemID) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         Optional<GameSystem> gameSystemOptional = gameSystemRepository.findById(gameSystemID);
