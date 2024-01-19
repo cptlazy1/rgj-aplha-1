@@ -117,7 +117,7 @@ class GameControllerIntegrationTest {
         testEntityManager.flush();
 
         this.mockMvc
-                .perform(get("/admin/games"))
+                .perform(get("/games"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk());
 
