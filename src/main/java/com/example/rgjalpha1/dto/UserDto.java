@@ -1,5 +1,6 @@
 package com.example.rgjalpha1.dto;
 
+import com.example.rgjalpha1.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +19,6 @@ public class UserDto {
     public String gameRoomPhotoFileName;
     public byte[] gameRoomPhotoData;
     public Boolean isEnabled;
+    public Role role;
 
 }
