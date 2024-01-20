@@ -1,6 +1,8 @@
 package com.example.rgjalpha1.service;
 
 import com.example.rgjalpha1.dto.UserDto;
+import com.example.rgjalpha1.exception.PasswordLengthException;
+import com.example.rgjalpha1.exception.PasswordMismatchException;
 import com.example.rgjalpha1.exception.RecordNotFoundException;
 import com.example.rgjalpha1.exception.UsernameNotFoundException;
 import com.example.rgjalpha1.model.Game;
@@ -163,23 +165,46 @@ public class UserService {
         }
     }
 
+//    // Method to change a user's password
+//    public void changeUserPassword(String username, String oldPassword, String newPassword) {
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        Optional<User> userOptional = userRepository.findByUsername(username);
+//
+//        if (userOptional.isPresent()) {
+//            User user = userOptional.get();
+//            if (passwordEncoder.matches(oldPassword, user.getPassword())) {
+//                user.setPassword(passwordEncoder.encode(newPassword));
+//                userRepository.save(user);
+//            } else {
+//                throw new PasswordMismatchException("Old password does not match the current password");
+//            }
+//        } else {
+//            throw new UsernameNotFoundException("No user record exists for given username");
+//        }
+//    }
+
     // Method to change a user's password
-    public void changeUserPassword(String username, String oldPassword, String newPassword) {
+    public void changeUserPassword(String username, String oldPassword, String newPassword) throws PasswordLengthException, PasswordMismatchException {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Optional<User> userOptional = userRepository.findByUsername(username);
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (passwordEncoder.matches(oldPassword, user.getPassword())) {
+                // Check if the new password is between 8 and 16 characters
+                if (newPassword.length() < 8 || newPassword.length() > 16) {
+                    throw new PasswordLengthException("Password must be between 8 and 16 characters");
+                }
                 user.setPassword(passwordEncoder.encode(newPassword));
                 userRepository.save(user);
             } else {
-                throw new IllegalArgumentException("Old password does not match the current password");
+                throw new PasswordMismatchException("Old password does not match the current password");
             }
         } else {
             throw new UsernameNotFoundException("No user record exists for given username");
         }
     }
+
 
     // Method to change a user's email
     public void changeUserEmail(String username, String newEmail) {

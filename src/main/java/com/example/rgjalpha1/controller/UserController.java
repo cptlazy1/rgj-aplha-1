@@ -9,6 +9,7 @@ import com.example.rgjalpha1.model.User;
 import com.example.rgjalpha1.repository.UserRepository;
 import com.example.rgjalpha1.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -165,7 +166,7 @@ public class UserController {
     @PutMapping("/users/{username}/change-password")
     public ResponseEntity<String> changePassword(
             @PathVariable("username") String username,
-            @RequestBody PasswordChangeRequest passwordChangeRequest) {
+            @Valid @RequestBody PasswordChangeRequest passwordChangeRequest) {
         userService.changeUserPassword(username, passwordChangeRequest.getOldPassword(), passwordChangeRequest.getNewPassword());
         return ResponseEntity.ok(username + "'s password has been changed ");
     }
@@ -174,7 +175,7 @@ public class UserController {
     @PutMapping("/users/{username}/change-email")
     public ResponseEntity<String> changeEmail(
             @PathVariable("username") String username,
-            @RequestBody EmailChangeRequest emailChangeRequest) {
+            @Valid @RequestBody EmailChangeRequest emailChangeRequest) {
         userService.changeUserEmail(username, emailChangeRequest.getNewEmail());
         return ResponseEntity.ok(username + "'s email has been changed ");
     }

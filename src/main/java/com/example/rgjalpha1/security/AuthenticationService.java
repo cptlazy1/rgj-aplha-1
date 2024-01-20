@@ -41,6 +41,7 @@ public class AuthenticationService {
             var jwToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
                     .jwToken(jwToken)
+                    .role(user.getRole())
                     .message("Account for user: " + registerRequest.getUsername() + " is created!")
                     .build();
         }
@@ -59,6 +60,7 @@ public class AuthenticationService {
         var jwToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .jwToken(jwToken)
+                .role(user.getRole())
                 .message("User: " + authenticationRequest.getUsername() + " is logged in!")
                 .build();
     }

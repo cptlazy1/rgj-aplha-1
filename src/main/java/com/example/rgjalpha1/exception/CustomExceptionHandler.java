@@ -29,4 +29,21 @@ public class CustomExceptionHandler {
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(PasswordLengthException.class)
+    public ResponseEntity<String> handlePasswordLengthException(PasswordLengthException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+//    @ExceptionHandler(PasswordMismatchException.class)
+//    public ResponseEntity<String> handlePasswordMismatchException(PasswordMismatchException ex) {
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+//    }
+
+    @ExceptionHandler(PasswordMismatchException.class)
+    public ResponseEntity<Object> handlePasswordMismatchException(PasswordMismatchException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("password", ex.getMessage());
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
 }
