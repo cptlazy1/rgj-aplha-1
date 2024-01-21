@@ -35,11 +35,6 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
-//    @ExceptionHandler(PasswordMismatchException.class)
-//    public ResponseEntity<String> handlePasswordMismatchException(PasswordMismatchException ex) {
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-//    }
-
     @ExceptionHandler(PasswordMismatchException.class)
     public ResponseEntity<Object> handlePasswordMismatchException(PasswordMismatchException ex) {
         Map<String, String> errors = new HashMap<>();
