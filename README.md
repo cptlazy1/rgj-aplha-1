@@ -1,3 +1,12 @@
+## Technologies Used
+
+- Java
+- SQL
+- Spring Boot
+- Maven
+
+## Endpoints
+
 GET http://localhost:8080/admin/users
 
 
