@@ -165,23 +165,6 @@ public class UserService {
         }
     }
 
-//    // Method to change a user's password
-//    public void changeUserPassword(String username, String oldPassword, String newPassword) {
-//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        Optional<User> userOptional = userRepository.findByUsername(username);
-//
-//        if (userOptional.isPresent()) {
-//            User user = userOptional.get();
-//            if (passwordEncoder.matches(oldPassword, user.getPassword())) {
-//                user.setPassword(passwordEncoder.encode(newPassword));
-//                userRepository.save(user);
-//            } else {
-//                throw new PasswordMismatchException("Old password does not match the current password");
-//            }
-//        } else {
-//            throw new UsernameNotFoundException("No user record exists for given username");
-//        }
-//    }
 
     // Method to change a user's password
     public void changeUserPassword(String username, String oldPassword, String newPassword) throws PasswordLengthException, PasswordMismatchException {

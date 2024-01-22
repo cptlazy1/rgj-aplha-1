@@ -152,15 +152,17 @@ public class GameController {
     }
 
 
-    // PutMapping to update game by username and gameID
-    @PutMapping("users/{username}/games/{id}")
-    public ResponseEntity<GameDto> updateGame(
-            @PathVariable("username") String username,
-            @PathVariable("id") Long gameID,
-            @RequestBody GameDto dto) {
-        GameDto gameDto = gameService.updateGame(username, gameID, dto);
-        return ResponseEntity.ok().body(gameDto);
-    }
+    // Leave this PUT MAPPING here for now
+
+//    // PutMapping to update game by username and gameID
+//    @PutMapping("users/{username}/games/{id}")
+//    public ResponseEntity<GameDto> updateGame(
+//            @PathVariable("username") String username,
+//            @PathVariable("id") Long gameID,
+//            @RequestBody GameDto dto) {
+//        GameDto gameDto = gameService.updateGame(username, gameID, dto);
+//        return ResponseEntity.ok().body(gameDto);
+//    }
 
 
     // DeleteMapping to delete game by gameID

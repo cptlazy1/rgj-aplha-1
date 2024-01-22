@@ -92,22 +92,20 @@ public class GameSystemController {
                 .getGameSystemConditionID(), gameSystemDto.getGameSystemID());
 
         return ResponseEntity.created(uri)
-//                .body(gameSystemDto.getGameSystemName() + " added successfully to user " + username);
-//                .body("ID:" + gameSystemDto.getGameSystemID() + " added successfully to user " + username);
-
                 // Return the game system ID instead of the game system name
                 .body(gameSystemDto.getGameSystemID());
     }
 
+    // Leave this PUT MAPPING here for now
 
-    // PutMapping to update game system
-    @PutMapping("users/{username}/game-systems/{id}")
-    public ResponseEntity<GameSystemDto> updateGameSystem(
-            @PathVariable("id") Long gameSystemID,
-            @Valid @RequestBody GameSystemDto dto)  {
-        GameSystemDto gameSystemDto = gameSystemService.updateGameSystem(gameSystemID, dto);
-        return ResponseEntity.ok().body(gameSystemDto);
-    }
+//    // PutMapping to update game system
+//    @PutMapping("users/{username}/game-systems/{id}")
+//    public ResponseEntity<GameSystemDto> updateGameSystem(
+//            @PathVariable("id") Long gameSystemID,
+//            @Valid @RequestBody GameSystemDto dto)  {
+//        GameSystemDto gameSystemDto = gameSystemService.updateGameSystem(gameSystemID, dto);
+//        return ResponseEntity.ok().body(gameSystemDto);
+//    }
 
     // DeleteMapping to delete a game system
     @DeleteMapping("users/{username}/game-systems/{id}")

@@ -137,22 +137,23 @@ public class UserController {
         }
     }
 
+    // Leave these two DELETE MAPPING endpoints for later use
 
-    // DeleteMapping to delete user profile photo by username
-    @DeleteMapping("/users/{username}/delete-pp")
-    public ResponseEntity<String> deleteProfilePhoto(
-            @PathVariable("username") String username) {
-        userService.deleteProfilePhoto(username);
-        return ResponseEntity.ok(username + "'s profile photo has been deleted ");
-    }
-
-    // DeleteMapping to delete user game room photo by username
-    @DeleteMapping("/users/{username}/delete-grp")
-    public ResponseEntity<String> deleteGameRoomPhoto(
-            @PathVariable("username") String username) {
-        userService.deleteGameRoomPhoto(username);
-        return ResponseEntity.ok(username + "'s game room photo has been deleted ");
-    }
+//    // DeleteMapping to delete user profile photo by username
+//    @DeleteMapping("/users/{username}/delete-pp")
+//    public ResponseEntity<String> deleteProfilePhoto(
+//            @PathVariable("username") String username) {
+//        userService.deleteProfilePhoto(username);
+//        return ResponseEntity.ok(username + "'s profile photo has been deleted ");
+//    }
+//
+//    // DeleteMapping to delete user game room photo by username
+//    @DeleteMapping("/users/{username}/delete-grp")
+//    public ResponseEntity<String> deleteGameRoomPhoto(
+//            @PathVariable("username") String username) {
+//        userService.deleteGameRoomPhoto(username);
+//        return ResponseEntity.ok(username + "'s game room photo has been deleted ");
+//    }
 
     // DeleteMapping to delete a user by username
     @DeleteMapping("/admin/users/{username}")
