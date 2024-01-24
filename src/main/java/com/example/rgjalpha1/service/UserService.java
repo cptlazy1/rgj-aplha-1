@@ -49,7 +49,7 @@ public class UserService {
     }
 
     // Method to get user by username
-    public UserDto getUserByUserName(String username) {
+    public UserDto getUserByUserName(String username) throws UsernameNotFoundException {
         UserDto userDto;
         Optional<User> userOptional = userRepository.findByUsername(username);
 
@@ -64,7 +64,7 @@ public class UserService {
     }
 
     //Method to delete user by username
-    public void deleteUserByUsername(String username) {
+    public void deleteUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> userOptional = userRepository.findByUsername(username);
 
         if (userOptional.isPresent()) {

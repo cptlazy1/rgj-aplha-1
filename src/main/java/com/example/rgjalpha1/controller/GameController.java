@@ -4,6 +4,7 @@ import com.example.rgjalpha1.dto.GameAndConditionDto;
 import com.example.rgjalpha1.dto.GameConditionDto;
 import com.example.rgjalpha1.dto.GameDto;
 import com.example.rgjalpha1.dto.PhotoUploadResponse;
+import com.example.rgjalpha1.exception.NoPhotoDataException;
 import com.example.rgjalpha1.exception.UsernameNotFoundException;
 import com.example.rgjalpha1.model.Game;
 import com.example.rgjalpha1.model.User;
@@ -92,8 +93,7 @@ public class GameController {
                 .path(username)
                 .path("/games/")
                 .path(gameID.toString())
-                .path("/download-game-photo/")
-                .path(Objects.requireNonNull(file.getOriginalFilename()))
+                .path("/download-game-photo")
                 .toUriString();
 
         String contentType = file.getContentType();
@@ -126,13 +126,15 @@ public class GameController {
             Game game1 = game.get();
 
             byte[] photoData = game1.getGamePhotoData();
+            if (photoData == null || photoData.length == 0) {
+                throw new NoPhotoDataException("No photo data exists for given gameID");
+            }
 
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                     "attachment; fileName=" + game1.getGamePhotoFileName()).body(photoData);
 
         }
     }
-
 
     // GetMapping to get all of a user's games
     @GetMapping("/users/{username}/games")

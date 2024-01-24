@@ -1,6 +1,7 @@
 package com.example.rgjalpha1.controller;
 
 import com.example.rgjalpha1.dto.*;
+import com.example.rgjalpha1.exception.NoPhotoDataException;
 import com.example.rgjalpha1.exception.RecordNotFoundException;
 import com.example.rgjalpha1.exception.UsernameNotFoundException;
 import com.example.rgjalpha1.model.GameSystem;
@@ -130,8 +131,7 @@ public class GameSystemController {
                     .path(username)
                     .path("/game-systems/")
                     .path(gameSystemID.toString())
-                    .path("/download-game-system-photo/")
-                    .path(Objects.requireNonNull(file.getOriginalFilename()))
+                    .path("/download-game-system-photo")
                     .toUriString();
 
             String contentType = file.getContentType();
@@ -163,6 +163,9 @@ public class GameSystemController {
             GameSystem gameSystem1 = gameSystem.get();
 
             byte[] photoData = gameSystem1.getGameSystemPhotoData();
+            if (photoData == null || photoData.length == 0) {
+                throw new NoPhotoDataException("No photo data exists for given game system");
+            }
 
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                     "attachment; fileName=" + gameSystem1.getGameSystemPhotoFileName()).body(photoData);

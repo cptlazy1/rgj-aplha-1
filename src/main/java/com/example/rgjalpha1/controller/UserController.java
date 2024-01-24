@@ -58,8 +58,7 @@ public class UserController {
                 .fromCurrentContextPath()
                 .path("/users/")
                 .path(username)
-                .path("/download-pp/")
-                .path(Objects.requireNonNull(file.getOriginalFilename()))
+                .path("/download-pp")
                 .toUriString();
 
         String contentType = file.getContentType();
@@ -85,8 +84,7 @@ public class UserController {
                 .fromCurrentContextPath()
                 .path("/users/")
                 .path(username)
-                .path("/download-grp/")
-                .path(Objects.requireNonNull(file.getOriginalFilename()))
+                .path("/download-grp")
                 .toUriString();
 
         String contentType = file.getContentType();
@@ -132,6 +130,7 @@ public class UserController {
             User user1 = user.get();
 
             byte[] photoData = user1.getGameRoomPhotoData();
+
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                     "attachment;fileName=" + user1.getGameRoomPhotoFileName()).body(photoData);
         }
