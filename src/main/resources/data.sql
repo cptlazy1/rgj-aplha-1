@@ -48,7 +48,3 @@ VALUES ('Neo-Geo', 'SNK', 1990, true, 'porgy123', 2);
 
 INSERT INTO game_systems (game_system_name, game_system_brand, game_system_year_of_release, is_ready_to_play, user_name, game_system_condition_id)
 VALUES ('Super Nintendo', 'Nintendo', 1990, true, 'porgy123', 3);
-
-
-
-
